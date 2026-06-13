@@ -267,6 +267,35 @@ h2.h{font-size:74px;}
 .cycle .legend p{font-size:24px;color:var(--ink-soft);line-height:1.35;}
 
 /* ============================================================
+   ATMOSPHERIC "SCENE" BACKGROUNDS — beautiful generative light
+   fields (warm dawn glow + drifting bokeh + film grain + vignette).
+   Applied to hero / opener / summary / closing slides.
+   Orbs are injected by JS into every .scene slide.
+   ============================================================ */
+.slide.scene{
+    background:
+        radial-gradient(46% 60% at 16% 20%, rgba(224,169,67,.30), transparent 70%),
+        radial-gradient(48% 55% at 84% 26%, rgba(201,113,74,.24), transparent 72%),
+        radial-gradient(60% 66% at 74% 94%, rgba(168,57,43,.15), transparent 76%),
+        radial-gradient(40% 50% at 28% 88%, rgba(214,179,130,.34), transparent 72%),
+        linear-gradient(155deg,#f9f3e8 0%, #f0e7d5 55%, #e7dabf 100%);
+}
+/* film grain (tiny inline SVG turbulence — scalable, no asset) */
+.slide.scene::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+    opacity:.42;mix-blend-mode:multiply;background-size:200px 200px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");}
+/* soft inner vignette for depth */
+.slide.scene::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+    box-shadow:inset 0 0 280px rgba(58,38,26,.20);}
+.slide.scene .pad{position:absolute;z-index:2;}
+/* drifting bokeh light orbs */
+.scene .orbs{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden;}
+.scene .orb{position:absolute;border-radius:50%;filter:blur(50px);opacity:.55;animation:floaty 9s ease-in-out infinite;}
+.scene .orb.a{width:380px;height:380px;background:radial-gradient(circle,rgba(224,169,67,.65),transparent 70%);top:-70px;left:7%;}
+.scene .orb.b{width:320px;height:320px;background:radial-gradient(circle,rgba(201,113,74,.55),transparent 70%);bottom:-60px;right:11%;animation-delay:-4s;}
+.scene .orb.c{width:240px;height:240px;background:radial-gradient(circle,rgba(168,57,43,.42),transparent 70%);top:42%;right:5%;animation-delay:-6.5s;}
+
+/* ============================================================
    ENTRANCE ANIMATIONS — staggered editorial reveals
    ============================================================ */
 .reveal{opacity:0;transform:translateY(28px);
@@ -320,7 +349,7 @@ h2.h{font-size:74px;}
 <main class="deck-stage" id="deckStage">
 
     <!-- ===== SLIDE 1 — TITLE ===== -->
-    <section class="slide title-slide active">
+    <section class="slide title-slide scene active">
         <div class="pad">
             <!-- connection motif: two presences, one thread -->
             <svg class="t-motif" viewBox="0 0 230 230" aria-hidden="true">
@@ -446,7 +475,7 @@ h2.h{font-size:74px;}
     </section>
 
     <!-- ===== SLIDE 4b — ANIMATED CYCLE DIAGRAM (centerpiece motion) ===== -->
-    <section class="slide">
+    <section class="slide scene">
         <div class="pad">
             <div class="head-row reveal">
                 <span class="crumb"><span class="n">↻</span><span class="sep"></span>מחזור התהליך</span>
@@ -494,7 +523,7 @@ h2.h{font-size:74px;}
     </section>
 
     <!-- ===== SLIDE 5 — RULE 1 OPENER ===== -->
-    <section class="slide opener">
+    <section class="slide opener scene">
         <div class="pad">
             <!-- emblem: an awareness eye -->
             <svg class="emblem" viewBox="0 0 300 300" aria-hidden="true">
@@ -593,7 +622,7 @@ h2.h{font-size:74px;}
     </section>
 
     <!-- ===== SLIDE 8 — RULE 2 OPENER ===== -->
-    <section class="slide opener">
+    <section class="slide opener scene">
         <div class="pad">
             <!-- emblem: ripples evoked from a spark -->
             <svg class="emblem" viewBox="0 0 300 300" aria-hidden="true">
@@ -694,7 +723,7 @@ h2.h{font-size:74px;}
     </section>
 
     <!-- ===== SLIDE 11 — RULE 3 OPENER ===== -->
-    <section class="slide opener">
+    <section class="slide opener scene">
         <div class="pad">
             <!-- emblem: a pulsing heart of concentric rings -->
             <svg class="emblem" viewBox="0 0 300 300" aria-hidden="true">
@@ -786,7 +815,7 @@ h2.h{font-size:74px;}
     </section>
 
     <!-- ===== SLIDE 14 — RULE 4 OPENER ===== -->
-    <section class="slide opener">
+    <section class="slide opener scene">
         <div class="pad">
             <!-- emblem: CRB2 rising, CRB1 falling over time -->
             <svg class="emblem" viewBox="0 0 300 300" aria-hidden="true">
@@ -854,7 +883,7 @@ h2.h{font-size:74px;}
     </section>
 
     <!-- ===== SLIDE 16 — RULE 5 OPENER ===== -->
-    <section class="slide opener">
+    <section class="slide opener scene">
         <div class="pad">
             <!-- emblem: from the room, outward into life -->
             <svg class="emblem" viewBox="0 0 300 300" aria-hidden="true">
@@ -986,7 +1015,7 @@ h2.h{font-size:74px;}
     </section>
 
     <!-- ===== SLIDE 20 — KEY TAKEAWAYS ===== -->
-    <section class="slide">
+    <section class="slide scene">
         <div class="pad">
             <div class="head-row reveal">
                 <span class="crumb"><span class="n">∑</span><span class="sep"></span>סיכום</span>
@@ -1007,7 +1036,7 @@ h2.h{font-size:74px;}
     </section>
 
     <!-- ===== SLIDE 21 — CLOSING QUOTE ===== -->
-    <section class="slide closing">
+    <section class="slide closing scene">
         <div class="pad">
             <span class="kicker reveal">לסיום</span>
             <blockquote class="big-q reveal" style="margin-top:30px;">
@@ -1098,6 +1127,14 @@ class SlidePresentation{
     }
 }
 const deck=new SlidePresentation();
+
+/* inject drifting bokeh orbs into every atmospheric scene slide */
+document.querySelectorAll('.slide.scene').forEach(s=>{
+    const o=document.createElement('div');
+    o.className='orbs';
+    o.innerHTML='<i class="orb a"></i><i class="orb b"></i><i class="orb c"></i>';
+    s.insertBefore(o,s.firstChild);
+});
 
 /* ============================================================
    INLINE EDITING — hover top-right or press E. Ctrl+S exports.
