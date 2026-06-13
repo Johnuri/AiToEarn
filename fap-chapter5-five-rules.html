@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>חמשת כללי ה־FAP · עיצוב התהליך — פרק 5</title>
+
+<!-- ============================================================
+     FONTS — Hebrew serif display (Frank Ruhl Libre) + Hebrew sans
+     body (Heebo) + Source Serif 4 for English/quotes. Never system.
+     ============================================================ -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700;900&family=Heebo:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;1,8..60,400;1,8..60,500&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   THEME — "דיו ונייר" (Paper & Ink)
+   Warm cream paper, charcoal ink, a single crimson accent.
+   Change these variables to retheme the entire deck.
+   ============================================================ */
+:root{
+    --paper:#f4eee1;          /* main slide background */
+    --paper-2:#ece4d2;        /* card / panel surface  */
+    --paper-3:#e4d9c2;        /* deeper panel / table head */
+    --ink:#211d17;            /* primary text */
+    --ink-soft:#5c5346;       /* secondary text */
+    --ink-faint:#8a7f6e;      /* tertiary / captions */
+    --crimson:#a8392b;        /* the single accent */
+    --crimson-soft:#c66a54;   /* lighter accent for fills */
+    --line:#d3c8b2;           /* hairlines / borders */
+    --stage-bg:#c7bca4;       /* letterbox surround */
+    --slide-bg:var(--paper);
+
+    --font-serif:'Frank Ruhl Libre', serif;   /* Hebrew display */
+    --font-sans:'Heebo', sans-serif;          /* Hebrew body / chrome */
+    --font-en:'Source Serif 4', serif;        /* Latin + quotes */
+
+    --ease:cubic-bezier(.16,1,.3,1);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+
+/* ============================================================
+   viewport-base.css  (MANDATORY — included in full)
+   ============================================================ */
+html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--stage-bg,#000);}
+.deck-viewport{position:fixed;inset:0;overflow:hidden;background:var(--stage-bg,#000);}
+.deck-stage{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:hidden;transform-origin:0 0;background:var(--slide-bg,#fff);}
+.slide{position:absolute;inset:0;width:1920px;height:1080px;overflow:hidden;display:block;visibility:hidden;opacity:0;pointer-events:none;background:var(--slide-bg,#fff);}
+.slide.active,.slide.visible{visibility:visible;opacity:1;pointer-events:auto;z-index:1;}
+img,video,canvas,svg{max-width:100%;max-height:100%;}
+.deck-controls{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:1000;}
+@media print{
+    html,body{width:1920px;height:auto;overflow:visible;background:#fff;}
+    .deck-viewport{position:static;overflow:visible;background:#fff;}
+    .deck-stage{position:static;width:auto;height:auto;transform:none!important;background:none;}
+    .slide{position:relative;display:block!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;width:1920px;height:1080px;break-after:page;page-break-after:always;}
+    .slide:last-child{break-after:auto;page-break-after:auto;}
+    .deck-controls{display:none!important;}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.2s!important;}}
+
+/* ============================================================
+   GLOBAL SLIDE CANVAS — paper grain + faint accent glow
+   ============================================================ */
+.slide{
+    color:var(--ink);
+    font-family:var(--font-sans);
+    background:
+        radial-gradient(circle at 90% 6%, rgba(168,57,43,.045), transparent 42%),
+        repeating-linear-gradient(0deg, rgba(33,29,23,.016) 0 2px, transparent 2px 5px),
+        var(--paper);
+}
+.pad{position:absolute;inset:0;padding:88px 132px;display:flex;flex-direction:column;}
+
+/* --- editorial chrome: breadcrumb + page number inside the stage --- */
+.crumb{display:flex;align-items:center;gap:16px;font-family:var(--font-sans);
+    font-weight:500;font-size:23px;letter-spacing:.04em;color:var(--ink-soft);}
+.crumb .n{font-family:var(--font-serif);font-weight:900;color:var(--crimson);font-size:27px;}
+.crumb .sep{width:34px;height:2px;background:var(--line);}
+.crumb .en{font-family:var(--font-en);font-style:italic;color:var(--ink-faint);}
+.foot{position:absolute;bottom:54px;right:132px;left:132px;display:flex;justify-content:space-between;
+    align-items:center;font-family:var(--font-sans);font-weight:500;font-size:20px;
+    letter-spacing:.06em;color:var(--ink-faint);}
+.foot .brand b{color:var(--crimson);}
+
+/* --- shared headings --- */
+.kicker{font-family:var(--font-sans);font-weight:700;font-size:23px;letter-spacing:.4em;
+    text-transform:uppercase;color:var(--crimson);}
+.h{font-family:var(--font-serif);font-weight:900;line-height:1.02;letter-spacing:-.01em;}
+h2.h{font-size:74px;}
+.divider{width:170px;height:5px;background:var(--crimson);border-radius:2px;}
+.lead{font-family:var(--font-en);font-style:italic;font-size:33px;line-height:1.5;color:var(--ink-soft);}
+.lead-he{font-family:var(--font-sans);font-weight:400;font-size:32px;line-height:1.55;color:var(--ink-soft);}
+
+/* ============================================================
+   TITLE SLIDE
+   ============================================================ */
+.title-slide .pad{justify-content:space-between;padding:120px 140px;}
+.masthead{display:flex;justify-content:space-between;align-items:baseline;
+    border-bottom:2px solid var(--ink);padding-bottom:26px;}
+.masthead .series{font-family:var(--font-sans);font-weight:500;font-size:26px;letter-spacing:.02em;}
+.masthead .series b{color:var(--crimson);}
+.masthead .chap{font-family:var(--font-en);font-style:italic;font-size:30px;color:var(--ink-soft);}
+.t-hero h1{font-family:var(--font-serif);font-weight:900;font-size:150px;line-height:.95;letter-spacing:-.01em;margin-top:28px;}
+.t-hero .en{display:block;font-family:var(--font-en);font-style:italic;font-weight:400;font-size:64px;
+    color:var(--ink-soft);margin-top:24px;direction:ltr;text-align:right;line-height:1.05;}
+.t-hero .divider{margin-top:44px;}
+.t-quote{max-width:1200px;font-family:var(--font-en);font-style:italic;font-size:34px;line-height:1.5;
+    color:var(--ink);direction:ltr;text-align:left;}
+.t-quote::before{content:"\201C";font-size:120px;line-height:0;color:var(--crimson);
+    vertical-align:-42px;margin-inline-end:6px;}
+.t-quote cite{display:block;margin-top:16px;font-style:normal;font-family:var(--font-sans);
+    font-weight:500;font-size:24px;color:var(--ink-soft);letter-spacing:.04em;}
+
+/* ============================================================
+   RULE OPENER SLIDES — giant number + rail
+   ============================================================ */
+.opener .pad{justify-content:center;}
+.opener-grid{display:grid;grid-template-columns:auto 1fr;gap:80px;align-items:center;}
+.rule-num{font-family:var(--font-serif);font-weight:900;font-size:420px;line-height:.8;
+    color:var(--crimson);position:relative;}
+.rule-num span{position:absolute;top:30px;right:-8px;font-size:60px;color:var(--ink-faint);}
+.opener .en-name{font-family:var(--font-en);font-style:italic;font-size:52px;color:var(--ink-soft);direction:ltr;text-align:right;}
+.opener h2{font-family:var(--font-serif);font-weight:900;font-size:118px;line-height:1;margin:14px 0 26px;}
+.opener .essence{font-family:var(--font-sans);font-weight:400;font-size:36px;line-height:1.45;color:var(--ink-soft);max-width:880px;}
+.opener .divider{margin-bottom:34px;}
+
+/* horizontal 5-rule rail (orientation aid) */
+.rail{display:flex;gap:14px;margin-top:54px;}
+.rail .step{display:flex;align-items:center;gap:14px;padding:14px 22px;border:2px solid var(--line);
+    border-radius:40px;font-family:var(--font-sans);font-weight:500;font-size:22px;color:var(--ink-faint);}
+.rail .step b{font-family:var(--font-serif);font-weight:900;}
+.rail .step.on{border-color:var(--crimson);color:var(--ink);background:var(--paper-2);}
+.rail .step.on b{color:var(--crimson);}
+
+/* ============================================================
+   CONTENT PRIMITIVES — bullets, cards, columns, table, callout
+   ============================================================ */
+.head-row{display:flex;flex-direction:column;gap:18px;}
+.head-row .top{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;}
+.body{margin-top:48px;flex:1;min-height:0;}
+
+/* bullet list */
+.points{list-style:none;display:flex;flex-direction:column;gap:22px;}
+.points li{position:relative;padding-inline-start:42px;font-size:31px;line-height:1.46;color:var(--ink);}
+.points li::before{content:"";position:absolute;right:0;top:15px;width:18px;height:18px;
+    background:var(--crimson);border-radius:50%;}
+.points.dense li{font-size:27px;gap:0;line-height:1.4;}
+.points.dense{gap:18px;}
+
+/* two-column split */
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:64px;}
+.col-h{font-family:var(--font-serif);font-weight:700;font-size:34px;color:var(--crimson);
+    margin-bottom:26px;display:flex;align-items:center;gap:16px;}
+.col-h::after{content:"";flex:1;height:2px;background:var(--line);}
+
+/* card grid */
+.cards{display:grid;gap:30px;}
+.cards.c2{grid-template-columns:1fr 1fr;}
+.cards.c3{grid-template-columns:repeat(3,1fr);}
+.card{background:var(--paper-2);border:1px solid var(--line);border-radius:16px;padding:38px 40px;
+    display:flex;flex-direction:column;gap:14px;}
+.card .tag{font-family:var(--font-sans);font-weight:700;font-size:21px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--crimson);}
+.card h3{font-family:var(--font-serif);font-weight:700;font-size:38px;line-height:1.05;}
+.card p{font-size:27px;line-height:1.45;color:var(--ink-soft);}
+.card .big{font-family:var(--font-serif);font-weight:900;font-size:64px;color:var(--crimson);line-height:1;}
+
+/* numbered mini-cards (Rule 3 how-to) */
+.howto{display:grid;grid-template-columns:repeat(5,1fr);gap:22px;}
+.howto .step{background:var(--paper-2);border:1px solid var(--line);border-radius:14px;padding:28px 24px;
+    display:flex;flex-direction:column;gap:12px;}
+.howto .step .num{font-family:var(--font-serif);font-weight:900;font-size:46px;color:var(--crimson);line-height:.9;}
+.howto .step h4{font-family:var(--font-serif);font-weight:700;font-size:27px;line-height:1.12;}
+.howto .step p{font-size:21px;line-height:1.42;color:var(--ink-soft);}
+
+/* overview table */
+.tbl{width:100%;border-collapse:collapse;font-size:29px;}
+.tbl th,.tbl td{text-align:right;padding:24px 28px;border-bottom:1px solid var(--line);vertical-align:middle;}
+.tbl thead th{font-family:var(--font-sans);font-weight:700;font-size:22px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink-faint);border-bottom:2px solid var(--ink);}
+.tbl .rn{font-family:var(--font-serif);font-weight:900;font-size:40px;color:var(--crimson);width:120px;}
+.tbl .en{font-family:var(--font-en);font-style:italic;color:var(--ink);font-size:30px;white-space:nowrap;}
+.tbl .ess{color:var(--ink-soft);}
+.tbl .kw{font-family:var(--font-sans);font-weight:700;color:var(--ink);white-space:nowrap;}
+.tbl tbody tr:hover{background:var(--paper-2);}
+
+/* callout / caution box */
+.callout{background:var(--paper-2);border-inline-start:6px solid var(--crimson);border-radius:0 14px 14px 0;
+    padding:34px 40px;}
+.callout .lbl{font-family:var(--font-sans);font-weight:700;font-size:22px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--crimson);margin-bottom:12px;}
+.callout p{font-size:29px;line-height:1.5;color:var(--ink);}
+
+/* annotated dialogue */
+.dlg{display:flex;flex-direction:column;gap:26px;}
+.turn{display:grid;grid-template-columns:170px 1fr;gap:30px;align-items:start;}
+.turn .ann{font-family:var(--font-sans);font-weight:700;font-size:22px;letter-spacing:.04em;
+    color:var(--crimson);padding-top:8px;text-align:left;}
+.turn .ann small{display:block;font-weight:500;font-size:18px;color:var(--ink-faint);letter-spacing:0;}
+.turn .say{background:var(--paper-2);border:1px solid var(--line);border-radius:14px;padding:24px 30px;
+    font-size:28px;line-height:1.42;}
+.turn .say b{color:var(--crimson);font-weight:700;}
+
+/* summary big points */
+.sum{display:grid;grid-template-columns:1fr 1fr;gap:30px 70px;}
+.sum .pt{display:grid;grid-template-columns:auto 1fr;gap:26px;align-items:start;}
+.sum .pt .n{font-family:var(--font-serif);font-weight:900;font-size:62px;color:var(--crimson);line-height:.9;}
+.sum .pt h4{font-family:var(--font-serif);font-weight:700;font-size:33px;line-height:1.1;}
+.sum .pt p{font-size:25px;line-height:1.42;color:var(--ink-soft);margin-top:6px;}
+
+/* closing */
+.closing .pad{justify-content:center;align-items:flex-start;}
+.closing .big-q{font-family:var(--font-en);font-style:italic;font-size:58px;line-height:1.34;
+    color:var(--ink);direction:ltr;text-align:left;max-width:1480px;}
+.closing .big-q b{color:var(--crimson);font-weight:500;}
+.closing cite{display:block;margin-top:30px;font-style:normal;font-family:var(--font-sans);
+    font-weight:500;font-size:28px;color:var(--ink-soft);letter-spacing:.04em;}
+.closing .end-mark{margin-top:60px;font-family:var(--font-serif);font-weight:900;font-size:30px;color:var(--crimson);letter-spacing:.3em;}
+
+/* ============================================================
+   ENTRANCE ANIMATIONS — staggered editorial reveals
+   ============================================================ */
+.reveal{opacity:0;transform:translateY(28px);
+    transition:opacity .8s var(--ease),transform .8s var(--ease);}
+.slide.visible .reveal{opacity:1;transform:none;}
+.slide.visible .reveal:nth-child(1){transition-delay:.05s;}
+.slide.visible .reveal:nth-child(2){transition-delay:.15s;}
+.slide.visible .reveal:nth-child(3){transition-delay:.25s;}
+.slide.visible .reveal:nth-child(4){transition-delay:.35s;}
+.slide.visible .reveal:nth-child(5){transition-delay:.45s;}
+.slide.visible .reveal:nth-child(6){transition-delay:.55s;}
+/* item stagger within lists/grids */
+.stag>*{opacity:0;transform:translateY(22px);transition:opacity .7s var(--ease),transform .7s var(--ease);}
+.slide.visible .stag>*{opacity:1;transform:none;}
+.slide.visible .stag>*:nth-child(1){transition-delay:.20s;}
+.slide.visible .stag>*:nth-child(2){transition-delay:.30s;}
+.slide.visible .stag>*:nth-child(3){transition-delay:.40s;}
+.slide.visible .stag>*:nth-child(4){transition-delay:.50s;}
+.slide.visible .stag>*:nth-child(5){transition-delay:.60s;}
+.slide.visible .stag>*:nth-child(6){transition-delay:.70s;}
+.slide.visible .stag>*:nth-child(7){transition-delay:.80s;}
+
+/* ============================================================
+   PRESENTATION CHROME (outside the stage)
+   ============================================================ */
+#progress{position:fixed;top:0;left:0;height:5px;background:var(--crimson);width:0;z-index:1000;
+    transition:width .35s var(--ease);}
+#counter{position:fixed;bottom:20px;left:24px;z-index:1000;font-family:'Heebo',sans-serif;
+    font-weight:500;font-size:16px;letter-spacing:.1em;color:#5c5346;background:rgba(244,238,225,.8);
+    padding:6px 14px;border-radius:20px;border:1px solid #d3c8b2;}
+#counter b{color:#a8392b;}
+
+/* inline edit affordance */
+.edit-hotzone{position:fixed;top:0;right:0;width:80px;height:80px;z-index:10000;cursor:pointer;}
+.edit-toggle{position:fixed;top:18px;right:18px;z-index:10001;opacity:0;pointer-events:none;
+    transition:opacity .3s;border:1px solid #d3c8b2;background:#f4eee1;border-radius:10px;
+    font-size:22px;padding:8px 12px;cursor:pointer;}
+.edit-toggle.show,.edit-toggle.active{opacity:1;pointer-events:auto;}
+.edit-toggle.active{background:#a8392b;color:#fff;}
+[contenteditable="true"]{outline:2px dashed #c66a54;outline-offset:4px;border-radius:4px;cursor:text;}
+#editHint{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:10001;
+    font-family:'Heebo',sans-serif;font-size:15px;color:#5c5346;background:rgba(244,238,225,.92);
+    border:1px solid #d3c8b2;padding:7px 16px;border-radius:20px;display:none;}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div id="counter"><b id="cur">1</b> / <span id="tot">21</span></div>
+
+<div class="deck-viewport">
+<main class="deck-stage" id="deckStage">
+
+    <!-- ===== SLIDE 1 — TITLE ===== -->
+    <section class="slide title-slide active">
+        <div class="pad">
+            <header class="masthead reveal">
+                <span class="series"><b>FAP</b> Made Simple · סדרת לימוד קלינית</span>
+                <span class="chap">פרק חמישי</span>
+            </header>
+            <div class="t-hero reveal">
+                <span class="kicker">חמשת כללי ה־FAP</span>
+                <h1>עיצוב התהליך
+                    <span class="en">Shape Process with the Five Rules of FAP</span>
+                </h1>
+                <div class="divider"></div>
+            </div>
+            <blockquote class="t-quote reveal">
+                It's easy to think it's about them, about him or her, but it's about you. And me. Connecting. Right now, in this conversation. Not that one. This one.
+                <cite>— Susan Scott</cite>
+            </blockquote>
+        </div>
+    </section>
+
+    <!-- ===== SLIDE 2 — OPENING: opportunity & responsibility ===== -->
+    <section class="slide">
+        <div class="pad">
+            <div class="head-row reveal">
+                <span class="crumb"><span class="n">00</span><span class="sep"></span>פתיח</span>
+                <div class="top">
+                    <h2 class="h">כשהבעיה מגיעה לחדר</h2>
+                </div>
+                <div class="divider"></div>
+            </div>
+            <div class="body">
+                <p class="lead-he reveal" style="max-width:1500px;margin-bottom:44px;">
+                    הפרק נפתח בדיאלוג טיפולי: מטופלת מספרת על התגוננות בקשר עם בעלה — ובתוך השיחה עצמה,
+                    בחדר הטיפול, אותה דינמיקה מתרחשת שוב. כשהמאבק הבינאישי של המטופל מתרחש <b>בין המטפל למטופל</b>,
+                    נוצרות בו־זמנית אחריות והזדמנות.
+                </p>
+                <div class="cards c2 stag">
+                    <div class="card">
+                        <span class="tag">האחריות</span>
+                        <h3>לא לשחזר את הכאב</h3>
+                        <p>לא לחזור על מה שהמטופל כבר חווה — שהפגיעות מסוכנת, שעדיף להישאר מרוחק ומוגן.</p>
+                    </div>
+                    <div class="card">
+                        <span class="tag">ההזדמנות</span>
+                        <h3>חוויה רגשית מתקנת</h3>
+                        <p>ליצור, כאן ועכשיו, חוויה חדשה ומתקנת של קרבה, פגיעות ובטיחות.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="foot"><span class="brand"><b>FAP</b> Made Simple · פרק 5</span><span>עיצוב התהליך</span></div>
+        </div>
+    </section>
+
+    <!-- ===== SLIDE 3 — CHANGE MECHANISM: what is a CRB? ===== -->
+    <section class="slide">
+        <div class="pad">
+            <div class="head-row reveal">
+                <span class="crumb"><span class="n">00</span><span class="sep"></span>מנגנון השינוי</span>
+                <div class="top">
+                    <h2 class="h">מהו CRB?</h2>
+                    <span class="lead" style="direction:ltr;text-align:left;">Clinically Relevant Behaviors</span>
+                </div>
+                <div class="divider"></div>
+            </div>
+            <div class="body">
+                <div class="cards c3 stag">
+                    <div class="card">
+                        <span class="big">CRB1</span>
+                        <h3>התנהגות בעייתית</h3>
+                        <p>הבעיה הקלינית שמופיעה בחדר הטיפול — תגובות שעיקרן שייך לעולם שמחוץ לטיפול.</p>
+                    </div>
+                    <div class="card">
+                        <span class="big">CRB2</span>
+                        <h3>שיפור וצמיחה</h3>
+                        <p>התנהגויות אפקטיביות יותר, שליטה על CRB1 — הדבר שאנו רוצים להגביר.</p>
+                    </div>
+                    <div class="card">
+                        <span class="big">CRB3</span>
+                        <h3>תיאור והכללה</h3>
+                        <p>תיאורי המטופל את התנהגותו מחוץ לחדר, וההעברה של מה שנלמד אל החיים.</p>
+                    </div>
+                </div>
+                <div class="callout reveal" style="margin-top:40px;">
+                    <p><b style="color:var(--crimson);">המטרה:</b> להפחית CRB1 ולהגביר CRB2 דרך הקשר הטיפולי עצמו.
+                    הכללים הם כלי למידה — לא מרשם נוקשה. "נסה את זה — כנראה שדברים טובים יקרו."</p>
+                </div>
+            </div>
+            <div class="foot"><span class="brand"><b>FAP</b> Made Simple · פרק 5</span><span>מנגנון השינוי</span></div>
+        </div>
+    </section>
+
+    <!-- ===== SLIDE 4 — OVERVIEW: the five rules ===== -->
+    <section class="slide">
+        <div class="pad">
+            <div class="head-row reveal">
+                <span class="crumb"><span class="n">★</span><span class="sep"></span>מבט־על</span>
+                <div class="top">
+                    <h2 class="h">חמשת הכללים במבט אחד</h2>
+                </div>
+                <div class="divider"></div>
+            </div>
+            <div class="body">
+                <table class="tbl">
+                    <thead><tr><th>כלל</th><th>שם</th><th>מהות</th><th>מילת מפתח</th></tr></thead>
+                    <tbody class="stag">
+                        <tr><td class="rn">1</td><td class="en">Notice CRB</td><td class="ess">מודעות ואמפתיה לרגע הנוכחי</td><td class="kw">שים לב</td></tr>
+                        <tr><td class="rn">2</td><td class="en">Evoke CRB</td><td class="ess">עידוד אסטרטגי, נועז ואמיתי</td><td class="kw">עורר</td></tr>
+                        <tr><td class="rn">3</td><td class="en">Reinforce CRB2</td><td class="ess">חיזוק טבעי, אינטנסיבי ואותנטי</td><td class="kw">חזק</td></tr>
+                        <tr><td class="rn">4</td><td class="en">Notice Your Effect</td><td class="ess">מעקב אחר ההתפתחות לאורך זמן</td><td class="kw">שים לב להשפעתך</td></tr>
+                        <tr><td class="rn">5</td><td class="en">Support Generalization</td><td class="ess">העברה לחיים מחוץ לחדר הטיפול</td><td class="kw">תמוך בהכללה</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="foot"><span class="brand"><b>FAP</b> Made Simple · פרק 5</span><span>מבט־על</span></div>
+        </div>
+    </section>
+
+    <!-- ===== SLIDE 5 — RULE 1 OPENER ===== -->
+    <section class="slide opener">
+        <div class="pad">
+            <div class="opener-grid">
+                <div class="rule-num reveal">1<span dir="ltr">/5</span></div>
+                <div>
+                    <p class="en-name reveal">Rule 1 · Notice CRB</p>
+                    <h2 class="reveal">שים לב</h2>
+                    <div class="divider reveal"></div>
+                    <p class="essence reveal">מודעות ואמפתיה לרגע הנוכחי — הבחנה בין מה שתקוע למה שצומח, בזמן אמת.</p>
+                    <div class="rail reveal">
+                        <span class="step on"><b>1</b> Notice</span>
+                        <span class="step"><b>2</b> Evoke</span>
+                        <span class="step"><b>3</b> Reinforce</span>
+                        <span class="step"><b>4</b> Effect</span>
+                        <span class="step"><b>5</b> Generalize</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SLIDE 6 — RULE 1 ESSENCE ===== -->
+    <section class="slide">
+        <div class="pad">
+            <div class="head-row reveal">
+                <span class="crumb"><span class="n">1</span><span class="sep"></span>שים לב ל־CRB<span class="sep"></span><span class="en">Notice CRB</span></span>
+                <div class="top"><h2 class="h">מהות הכלל</h2></div>
+                <div class="divider"></div>
+            </div>
+            <div class="body">
+                <div class="cols">
+                    <div>
+                        <div class="col-h">הכלל החשוב ביותר</div>
+                        <p class="lead-he">בוב קוהלנברג, אחד מיוצרי FAP, כינה זאת שנים רבות הכלל החשוב ביותר: כשמבינים אילו התנהגויות משרתות את המטופל ומבטאות צמיחה — ואילו מבטאות תקיעות — ממילא מגיבים בדרכים שמטפחות את האפקטיביות.</p>
+                        <ul class="points dense" style="margin-top:30px;">
+                            <li><b>מודעות</b> — להבין מה מתעורר במטופל בתוך הטיפול וכיצד זה קשור לבעיה הקלינית.</li>
+                            <li><b>אמפתיה</b> — רגישות עדינה לחוויה הפנימית: מי הוא רוצה להיות, וכמה קרוב הוא לאידיאל הזה ברגע זה.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="col-h">המשמעות הטכנית</div>
+                        <p class="lead-he">הבחנה בין CRB1 ל־CRB2 בזמן אמת, והבנה כיצד הם מתעוררים ומעוצבים ברגע הנוכחי.</p>
+                        <div class="callout" style="margin-top:30px;">
+                            <span class="lbl">הבסיס לכל השאר</span>
+                            <p>ללא היכולת לראות את ה־CRB ברגע התרחשותו — ארבעת הכללים האחרים אינם יכולים לפעול. זו דורשת הבנה של ההקשר הרחב של חיי המטופל ורגשותיו.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="foot"><span class="brand"><b>FAP</b> Made Simple · פרק 5</span><span>כלל 1 · שים לב</span></div>
+        </div>
+    </section>
+
+    <!-- ===== SLIDE 7 — RULE 1 EXAMPLES + REFLECTION ===== -->
+    <section class="slide">
+        <div class="pad">
+            <div class="head-row reveal">
+                <span class="crumb"><span class="n">1</span><span class="sep"></span>שים לב ל־CRB</span>
+                <div class="top"><h2 class="h">לזהות את הרגע</h2></div>
+                <div class="divider"></div>
+            </div>
+            <div class="body">
+                <div class="cols">
+                    <div>
+                        <div class="col-h">דוגמאות ל־CRB ברגע</div>
+                        <ul class="points dense stag">
+                            <li>מטופל אקומודטיבי מדי לגבי קביעת פגישות — אף שזה נוח, ידוע שהוא מתקשה לבטא צרכים.</li>
+                            <li>מטופל שנסגר ומגלה שפת גוף של בושה כשנוגעים בנושא מסוים.</li>
+                            <li>מטופל שקשריו מאופיינים בהימנעות — ונראה לא מעורב בפגישה.</li>
+                            <li>מטופל שמתקשה לבטא רגש בחיי היומיום בוכה בפגישה, ובפגישה הבאה נסוג.</li>
+                            <li>מטופל שעובר בין השקפות עצמיות סותרות ומתלונן שאיש לא מתקרב אליו.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="col-h">שאלות להדרכה ולרפלקציה</div>
+                        <ul class="points dense stag">
+                            <li>מהם הדפוסים הבין־אישיים של המטופל בחיי היומיום? אילו מהם בעייתיים?</li>
+                            <li>מה הדפוסים בתהליך שביניכם — ומהי נקודת הדמיון הפונקציונלי לחוץ?</li>
+                            <li>אילו התנהגויות ספציפיות שלך תורמות לדפוסים הללו?</li>
+                            <li>האם יש בקשר דפוסים שקשה לתאר — מבלבלים, מעצבנים, מטרידים?</li>
+                            <li>האם יש לך נקודות עיוורות או פגיעויות שפוגמות בראיית CRBs?</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="foot"><span class="brand"><b>FAP</b> Made Simple · פרק 5</span><span>כלל 1 · שים לב</span></div>
+        </div>
+    </section>
+
+    <!-- ===== SLIDE 8 — RULE 2 OPENER ===== -->
+    <section class="slide opener">
+        <div class="pad">
+            <div class="opener-grid">
+                <div class="rule-num reveal">2<span dir="ltr">/5</span></div>
+                <div>
+                    <p class="en-name reveal">Rule 2 · Evoke CRB</p>
+                    <h2 class="reveal">עורר</h2>
+                    <div class="divider reveal"></div>
+                    <p class="essence reveal">לא רק לשים לב — ליצור באופן אסטרטגי את ההקשר שבו ה־CRB מתעורר. כוח משבש, חיובי וכן.</p>
+                    <div class="rail reveal">
+                        <span class="step"><b>1</b> Notice</span>
+                        <span class="step on"><b>2</b> Evoke</span>
+                        <span class="step"><b>3</b> Reinforce</span>
+                        <span class="step"><b>4</b> Effect</span>
+                        <span class="step"><b>5</b> Generalize</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SLIDE 9 — RULE 2 ESSENCE + CAUTION ===== -->
+    <section class="slide">
+        <div class="pad">
+            <div class="head-row reveal">
+                <span class="crumb"><span class="n">2</span><span class="sep"></span>עורר CRB<span class="sep"></span><span class="en">Evoke CRB</span></span>
+                <div class="top"><h2 class="h">מהות הכלל</h2></div>
+                <div class="divider"></div>
+            </div>
+            <div class="body">
+                <p class="lead-he reveal" style="max-width:1560px;margin-bottom:38px;">
+                    לאחר שהתכוונת ברגישות למטופל ואתה רואה את הפונקציה של מה שקורה — אפשר להיות אסטרטגי ומפורש
+                    ביצירת ההקשר שבו CRBs מתעוררים: לדבר ישירות על מה שקורה ביניכם, על הקשר לבעיות הקליניות,
+                    ועל האפשרות לתרגל תגובות אחרות, אפקטיביות יותר.
+                </p>
+                <div class="cards c2 stag">
+                    <div class="card">
+                        <span class="tag">הזהירות</span>
+                        <h3>טבעיות אמיתית — לא מניפולציה</h3>
+                        <p>אם ההקשר המעורר מרגיש מלאכותי, הוא חותר תחת בסיס הקשר. הכלל דורש אומץ: לעורר משהו חדש מחוץ לאזור הנוחות — של המטפל ושל המטופל כאחד.</p>
+                    </div>
+                    <div class="card">
+                        <span class="tag">פונקציה כפולה</span>
+                        <h3>לתמוך לפחות כמו שמאתגרים</h3>
+                        <p>עידוד מעלה גם רגשות, מחשבות ותגובות נוספות. כשמעוררים CRB — האחריות היא להיות מכוון ורספונסיבי לרגע השלם.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="foot"><span class="brand"><b>FAP</b> Made Simple · פרק 5</span><span>כלל 2 · עורר</span></div>
+        </div>
+    </section>
+
+    <!-- ===== SLIDE 10 — RULE 2 EXAMPLES + REFLECTION ===== -->
+    <section class="slide">
+        <div class="pad">
+            <div class="head-row reveal">
+                <span class="crumb"><span class="n">2</span><span class="sep"></span>עורר CRB</span>
+                <div class="top"><h2 class="h">להזמין את החדש</h2></div>
+                <div class="divider"></div>
+            </div>
+            <div class="body">
+                <div class="cols">
+                    <div>
+                        <div class="col-h">דוגמאות לעידוד CRB</div>
+                        <ul class="points dense stag">
+                            <li>מתקשה לבטא צרכים — להזמין אותה לפתוח כל פגישה בהצהרה ברורה של צרכיה.</li>
+                            <li>פוחד מאינטימיות — לבקש לתרגל שיתוף במה שהוא נמנע ממנו, ולעודד שאלות אישיות.</li>
+                            <li>מתקשה לקבל אהבה — לבקש לשים לב לביטוי החם שלך כשהיא נכנסת לחדר.</li>
+                            <li>לספר למטופל על אובדן אישי — ולתת לו הזדמנות להגיב לרגשותיך, במיקוד במטרותיו.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="col-h">שאלות להדרכה ולרפלקציה</div>
+                        <ul class="points dense stag">
+                            <li>אילו מצבים בטיפול, או התנהגויות שלך, מעוררים CRB מהמטופל?</li>
+                            <li>ממה אתה נמנע משום שה־CRB אי־נוח לך? האם ההימנעות אפקטיבית?</li>
+                            <li>האם העלית את מה שזיהית, ולקחת אחריות על חלקך במחזורים המתפתחים?</li>
+                            <li>כשאתה מעורר CRB2 — האם אתה רגיש לאיזון בין אומץ לאהבה?</li>
+                            <li>כיצד ההיסטוריה שלך משפיעה על האופן שבו אתה מאתגר?</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="foot"><span class="brand"><b>FAP</b> Made Simple · פרק 5</span><span>כלל 2 · עורר</span></div>
+        </div>
+    </section>
+
+    <!-- ===== SLIDE 11 — RULE 3 OPENER ===== -->
+    <section class="slide opener">
+        <div class="pad">
+            <div class="opener-grid">
+                <div class="rule-num reveal">3<span dir="ltr">/5</span></div>
+                <div>
+                    <p class="en-name reveal">Rule 3 · Reinforce CRB2</p>
+                    <h2 class="reveal">חזק</h2>
+                    <div class="divider reveal"></div>
+                    <p class="essence reveal">לב ה־FAP. מנגנון השינוי הספציפי: לעצב CRB2 כך שיתמיד — דרך האופן שבו אתה מגיב ברגע שהוא קורה.</p>
+                    <div class="rail reveal">
+                        <span class="step"><b>1</b> Notice</span>
+                        <span class="step"><b>2</b> Evoke</span>
+                        <span class="step on"><b>3</b> Reinforce</span>
+                        <span class="step"><b>4</b> Effect</span>
+                        <span class="step"><b>5</b> Generalize</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SLIDE 12 — RULE 3 HOW-TO (5 guidelines) ===== -->
+    <section class="slide">
+        <div class="pad">
+            <div class="head-row reveal">
+                <span class="crumb"><span class="n">3</span><span class="sep"></span>חזק CRB2<span class="sep"></span><span class="en">Reinforce CRB2</span></span>
+                <div class="top"><h2 class="h">כיצד לחזק — חמש הנחיות</h2></div>
+                <div class="divider"></div>
+            </div>
+            <div class="body" style="display:flex;flex-direction:column;gap:38px;">
+                <p class="lead-he reveal" style="max-width:1560px;">
+                    התאמה לפונקציה החיובית של קשר חברתי תומך היא דרך עוצמתית יותר לעצב התנהגות מאשר עונש על CRB1.
+                    מה שחשוב הוא ההשלכות — כיצד אתה מגיב ברגע שה־CRB2 קורה.
+                </p>
+                <div class="howto stag">
+                    <div class="step"><span class="num">1</span><h4>טבעי אך אינטנסיבי</h4><p>זהה את תגובתך הטבעית והגבר אותה מעבר לנורמות החברתיות הרגילות.</p></div>
+                    <div class="step"><span class="num">2</span><h4>בטיחות וקבלה</h4><p>הבע בפירוש, באותנטיות, שהמטופל בטוח ומקובל עליך — ברמה הבסיסית ביותר.</p></div>
+                    <div class="step"><span class="num">3</span><h4>דבר בביטחון</h4><p>קול ברור, חזק ואמיתי — במיוחד ב־100% קבלה, ולא בעמימות ברגעי פגיעות.</p></div>
+                    <div class="step"><span class="num">4</span><h4>למד לאדם</h4><p>הפונקציה חשובה מהצורה: מה שמאמת אחד עלול לבייש אחר. למד מה עובד לכל מטופל.</p></div>
+                    <div class="step"><span class="num">5</span><h4>היה אמיתי</h4><p>בני אדם מזהים זיוף, בפרט מי שנפגע. הבא את קולך הייחודי — אל תעקוב אחרי תסריט.</p></div>
+                </div>
+            </div>
+            <div class="foot"><span class="brand"><b>FAP</b> Made Simple · פרק 5</span><span>כלל 3 · חזק</span></div>
+        </div>
+    </section>
+
+    <!-- ===== SLIDE 13 — RULE 3 EXAMPLES + REFLECTION ===== -->
+    <section class="slide">
+        <div class="pad">
+            <div class="head-row reveal">
+                <span class="crumb"><span class="n">3</span><span class="sep"></span>חזק CRB2</span>
+                <div class="top"><h2 class="h">חיזוק בפועל</h2></div>
+                <div class="divider"></div>
+            </div>
+            <div class="body">
+                <div class="cols">
+                    <div>
+                        <div class="col-h">דוגמאות לחיזוק CRB2</div>
+                        <ul class="points dense stag">
+                            <li>הכרה בבקשה לזמן פגישה נוסף — על ידי מתן הזמן בפועל.</li>
+                            <li>שיתוף תגובה עמוקה לסיפור חייו של המטופל וכמה היה מעורר השראה.</li>
+                            <li>"זה CRB2 מדהים שלך!" — תוך הושטת יד ל"high five".</li>
+                            <li>לומר שה־CRB2 שלו חידש בך את ההתלהבות מהעבודה.</li>
+                            <li>להצטרף לפגיעות שלה בכך שתשתף חוויה דומה משלך.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="col-h">שאלות להדרכה ולרפלקציה</div>
+                        <ul class="points dense stag">
+                            <li>האם אתה רואה את רגעי השיפור? האם אתה מרגיש מעורב בתהליך השינוי?</li>
+                            <li>האם המטופל מודע לתגובותיך לפגיעות ולצמיחה שלו?</li>
+                            <li>האם אתה מגיב בדרכים פתוחות־לב שמרגישות אמיתיות לך?</li>
+                            <li>האם אתה מסתיר תגובה רגשית מאחורי פסיכואדוקציה או ניסוח?</li>
+                            <li>מה אתה מעריך ואוהב במטופל — והאם הודעת לו זאת?</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="foot"><span class="brand"><b>FAP</b> Made Simple · פרק 5</span><span>כלל 3 · חזק</span></div>
+        </div>
+    </section>
+
+    <!-- ===== SLIDE 14 — RULE 4 OPENER ===== -->
+    <section class="slide opener">
+        <div class="pad">
+            <div class="opener-grid">
+                <div class="rule-num reveal">4<span dir="ltr">/5</span></div>
+                <div>
+                    <p class="en-name reveal">Rule 4 · Notice Your Effect</p>
+                    <h2 class="reveal">שים לב להשפעתך</h2>
+                    <div class="divider reveal"></div>
+                    <p class="essence reveal">חיזוק פועל לאורך זמן, לא מיידית. עקוב אחר המגמה: האם CRB2 עולה ו־CRB1 יורד?</p>
+                    <div class="rail reveal">
+                        <span class="step"><b>1</b> Notice</span>
+                        <span class="step"><b>2</b> Evoke</span>
+                        <span class="step"><b>3</b> Reinforce</span>
+                        <span class="step on"><b>4</b> Effect</span>
+                        <span class="step"><b>5</b> Generalize</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SLIDE 15 — RULE 4 ESSENCE + TOOLS + REFLECTION ===== -->
+    <section class="slide">
+        <div class="pad">
+            <div class="head-row reveal">
+                <span class="crumb"><span class="n">4</span><span class="sep"></span>שים לב להשפעתך<span class="sep"></span><span class="en">Notice Your Effect</span></span>
+                <div class="top"><h2 class="h">מה קורה לאורך זמן?</h2></div>
+                <div class="divider"></div>
+            </div>
+            <div class="body">
+                <p class="lead-he reveal" style="max-width:1560px;margin-bottom:36px;">
+                    חיזוק הוא תהליך שבו התנהגות עולה בתדירות כתוצאה מהשלכותיה לאורך זמן. כדי לדעת שאתה אכן מחזק CRB2,
+                    שים לב לא רק לתגובתך ברגע — אלא לאופן שבו ההתנהגות מתפתחת. <b>טעויות בלתי נמנעות; מה שמשנה הוא המגמה הכוללת.</b>
+                </p>
+                <div class="cols">
+                    <div>
+                        <div class="col-h">כלים מעשיים</div>
+                        <ul class="points dense stag">
+                            <li>אחרי חילופי דברים אינטנסיביים — לברר כיצד חוותה את האינטראקציה.</li>
+                            <li>אם חוזר אותו דפוס — לשאול אם יש לו אותו רושם, ומה הדפוס מייצג.</li>
+                            <li>אחרי ניסיון לספק בטיחות — לשאול ישירות אם הוא מרגיש בטוח יותר.</li>
+                            <li>בסוף כל פגישה: "כיצד הייתי בתגובה אליך היום?"</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="col-h">שאלות להדרכה</div>
+                        <ul class="points dense stag">
+                            <li>האם CRB2 עולה בחוזק ובתדירות — ו־CRB1 יורד?</li>
+                            <li>כשהמטופל בתקיעות — האם משהו שאתה עושה אינו מסייע?</li>
+                            <li>האם אתה בודק את השפעתך באופן קבוע, או מניח אותה?</li>
+                            <li>מה יכול לשפר את האופן שבו אתה מנטר את התהליך?</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="foot"><span class="brand"><b>FAP</b> Made Simple · פרק 5</span><span>כלל 4 · שים לב להשפעתך</span></div>
+        </div>
+    </section>
+
+    <!-- ===== SLIDE 16 — RULE 5 OPENER ===== -->
+    <section class="slide opener">
+        <div class="pad">
+            <div class="opener-grid">
+                <div class="rule-num reveal">5<span dir="ltr">/5</span></div>
+                <div>
+                    <p class="en-name reveal">Rule 5 · Support Generalization</p>
+                    <h2 class="reveal">תמוך בהכללה</h2>
+                    <div class="divider reveal"></div>
+                    <p class="essence reveal">המטרה היא שינוי מחוץ לחדר — מתמשך מספיק כדי שהטיפול יוכל בסופו של דבר להסתיים.</p>
+                    <div class="rail reveal">
+                        <span class="step"><b>1</b> Notice</span>
+                        <span class="step"><b>2</b> Evoke</span>
+                        <span class="step"><b>3</b> Reinforce</span>
+                        <span class="step"><b>4</b> Effect</span>
+                        <span class="step on"><b>5</b> Generalize</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SLIDE 17 — RULE 5 TWO WAYS ===== -->
+    <section class="slide">
+        <div class="pad">
+            <div class="head-row reveal">
+                <span class="crumb"><span class="n">5</span><span class="sep"></span>תמוך בהכללה<span class="sep"></span><span class="en">Support Generalization</span></span>
+                <div class="top"><h2 class="h">מהחדר אל החיים — שתי דרכים</h2></div>
+                <div class="divider"></div>
+            </div>
+            <div class="body">
+                <div class="cards c2 stag">
+                    <div class="card">
+                        <span class="tag">דרך 1</span>
+                        <h3>מקבילות מבפנים־לחוץ</h3>
+                        <p><i style="font-family:var(--font-en);">In-to-Out Parallels</i> — לקחת את מה שקרה זה עתה בפגישה ולהקביל אותו למצב שאכפת למטופל ממנו בחוץ. שתפו אותו בניתוח הפונקציונלי ובניסוח המקרה.</p>
+                    </div>
+                    <div class="card">
+                        <span class="tag">דרך 2</span>
+                        <h3>שיעורי בית — תרגול עם אחרים</h3>
+                        <p>המטלות הטובות נובעות מיד מאינטראקציה עוצמתית בפגישה. למשל: אחרי שחיזקנו קשר עין מוגבר כ־CRB2 — לבקש להגביר קשר עין עם אחרים.</p>
+                    </div>
+                </div>
+                <div class="callout reveal" style="margin-top:36px;">
+                    <span class="lbl">דוגמה למקבילה מבפנים־לחוץ</span>
+                    <p style="font-family:var(--font-en);font-style:italic;direction:ltr;text-align:left;">"When you ask me for what you need, I give it to you. I think your partner wants that from you too — what do you think?"</p>
+                </div>
+            </div>
+            <div class="foot"><span class="brand"><b>FAP</b> Made Simple · פרק 5</span><span>כלל 5 · תמוך בהכללה</span></div>
+        </div>
+    </section>
+
+    <!-- ===== SLIDE 18 — RULE 5 EXAMPLES + REFLECTION ===== -->
+    <section class="slide">
+        <div class="pad">
+            <div class="head-row reveal">
+                <span class="crumb"><span class="n">5</span><span class="sep"></span>תמוך בהכללה</span>
+                <div class="top"><h2 class="h">לקדם הכללה</h2></div>
+                <div class="divider"></div>
+            </div>
+            <div class="body">
+                <div class="cols">
+                    <div>
+                        <div class="col-h">דוגמאות נוספות</div>
+                        <ul class="points dense stag">
+                            <li>לשתף את המטופל בניתוח הפונקציונלי ובזיהוי CRB1 ו־CRB2.</li>
+                            <li>לקבל פידבק: כמה רגעי פגישה דומים להקשרים חשובים בחוץ.</li>
+                            <li>להצביע כיצד מה שעשה בפגישה רלוונטי לקשריו עם אחרים.</li>
+                            <li>אחרי שזיהתה צורך בפגישה — שיעורי בית להתחבר לצרכיה כל יום.</li>
+                            <li>לתזמן פעילות שמזמנת תרגול CRB2 — מיד לאחר שהופיע בפגישה.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="col-h">שאלות להדרכה ולרפלקציה</div>
+                        <ul class="points dense stag">
+                            <li>האם המטופל מסכים שה־CRBs בפגישה דומים פונקציונלית להתנהגויות בחוץ?</li>
+                            <li>אם לא — האם דנתם בנקודות המחלוקת?</li>
+                            <li>האם אתה דן בדרכים שבהן הוא לוקח את מה שחווה אצלך אל חייו?</li>
+                            <li>כמה טוב עובדת ההעברה לחיי היומיום? מה יכול לשפר אותה?</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="foot"><span class="brand"><b>FAP</b> Made Simple · פרק 5</span><span>כלל 5 · תמוך בהכללה</span></div>
+        </div>
+    </section>
+
+    <!-- ===== SLIDE 19 — ANNOTATED DIALOGUE ===== -->
+    <section class="slide">
+        <div class="pad">
+            <div class="head-row reveal">
+                <span class="crumb"><span class="n">●</span><span class="sep"></span>הדגמה<span class="sep"></span><span class="en">Case Example</span></span>
+                <div class="top"><h2 class="h">חמשת הכללים בפעולה</h2></div>
+                <div class="divider"></div>
+            </div>
+            <div class="body">
+                <div class="dlg stag">
+                    <div class="turn">
+                        <div class="ann">כלל 1<small>Notice</small></div>
+                        <div class="say">המטפל מזהה CRB שהתרחש קודם בפגישה — אותה התגוננות שהמטופלת תיארה בבית, מתרחשת עכשיו בחדר.</div>
+                    </div>
+                    <div class="turn">
+                        <div class="ann">כלל 2<small>Evoke</small></div>
+                        <div class="say">"מה <b>יכולת לנסות ממש עכשיו</b> שייראה פחות הגנתי?" — הזמנה מפורשת לתגובה חדשה ברגע.</div>
+                    </div>
+                    <div class="turn">
+                        <div class="ann">כלל 3<small>Reinforce</small></div>
+                        <div class="say">"זה <b>מדהים</b> כמה שונה זה נשמע" — חיזוק אותנטי ואינטנסיבי של רגע הפגיעות והשינוי.</div>
+                    </div>
+                    <div class="turn">
+                        <div class="ann">כלל 5<small>Generalize</small></div>
+                        <div class="say" style="direction:ltr;text-align:left;">"<b>What if you could do this with her?</b>" — חיבור הרגע אל הקשר המשמעותי שמחוץ לחדר.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="foot"><span class="brand"><b>FAP</b> Made Simple · פרק 5</span><span>הדגמה · הכללים חיים</span></div>
+        </div>
+    </section>
+
+    <!-- ===== SLIDE 20 — KEY TAKEAWAYS ===== -->
+    <section class="slide">
+        <div class="pad">
+            <div class="head-row reveal">
+                <span class="crumb"><span class="n">∑</span><span class="sep"></span>סיכום</span>
+                <div class="top"><h2 class="h">FAP — לא סגנון, אלא תהליך</h2></div>
+                <div class="divider"></div>
+            </div>
+            <div class="body" style="display:flex;flex-direction:column;justify-content:center;">
+                <div class="sum stag">
+                    <div class="pt"><span class="n">1</span><div><h4>הכללים הם כלי למידה</h4><p>לא מרשם נוקשה — מסגרת לחשיבה פונקציונלית רגע אחר רגע.</p></div></div>
+                    <div class="pt"><span class="n">2</span><div><h4>כלל 1 הוא הבסיס</h4><p>בלי מודעות ואמפתיה לרגע, שאר הכללים אינם יכולים לפעול.</p></div></div>
+                    <div class="pt"><span class="n">3</span><div><h4>כלל 3 הוא הלב</h4><p>חיזוק CRB2 הוא מנגנון השינוי הספציפי של FAP.</p></div></div>
+                    <div class="pt"><span class="n">4</span><div><h4>האמינות היא הכלי</h4><p>האותנטיות של המטפל היא הכלי העיקרי לשינוי.</p></div></div>
+                    <div class="pt" style="grid-column:1 / -1;"><span class="n">5</span><div><h4>המטרה: שינוי מחוץ לחדר</h4><p>הצלחת הטיפול נמדדת בחיים — לא בחדר בלבד.</p></div></div>
+                </div>
+            </div>
+            <div class="foot"><span class="brand"><b>FAP</b> Made Simple · פרק 5</span><span>סיכום</span></div>
+        </div>
+    </section>
+
+    <!-- ===== SLIDE 21 — CLOSING QUOTE ===== -->
+    <section class="slide closing">
+        <div class="pad">
+            <span class="kicker reveal">לסיום</span>
+            <blockquote class="big-q reveal" style="margin-top:30px;">
+                FAP is about these moments in the therapy relationship, when a compassionate understanding of the other person allows you to <b>see</b> and <b>evoke</b> and <b>reinforce</b> a different way of relating.
+                <cite>— Shape Process with the Five Rules of FAP</cite>
+            </blockquote>
+            <div class="end-mark reveal">כאן · ועכשיו</div>
+        </div>
+    </section>
+
+</main>
+</div>
+
+<!-- presentation chrome -->
+<div class="edit-hotzone" title="מצב עריכה (E)"></div>
+<button class="edit-toggle" id="editToggle" title="מצב עריכה (E)">✎</button>
+<div id="editHint">מצב עריכה פעיל · לחצו על טקסט לעריכה · Ctrl+S לשמירה · E ליציאה</div>
+
+<script>
+/* ============================================================
+   SLIDE PRESENTATION CONTROLLER (RTL-aware)
+   - Stage scaling keeps the 1920×1080 canvas at 16:9
+   - Keyboard / wheel / touch navigation
+   - In RTL the LEFT arrow advances; RIGHT goes back
+   ============================================================ */
+class SlidePresentation{
+    constructor(){
+        this.slides=[...document.querySelectorAll('.slide')];
+        this.i=0;
+        this.stage=document.getElementById('deckStage');
+        this.locked=false; // disabled while editing text
+        document.getElementById('tot').textContent=this.slides.length;
+        this.scale(); addEventListener('resize',()=>this.scale());
+        this.keys(); this.wheel(); this.touch();
+        this.show(0);
+    }
+    scale(){
+        const f=Math.min(innerWidth/1920,innerHeight/1080);
+        this.stage.style.transform=
+            `translate(${(innerWidth-1920*f)/2}px,${(innerHeight-1080*f)/2}px) scale(${f})`;
+    }
+    show(n){
+        this.i=Math.max(0,Math.min(n,this.slides.length-1));
+        this.slides.forEach((s,k)=>{
+            s.classList.toggle('active',k===this.i);
+            s.classList.toggle('visible',k===this.i);
+        });
+        document.getElementById('cur').textContent=this.i+1;
+        document.getElementById('progress').style.width=
+            ((this.i+1)/this.slides.length*100)+'%';
+    }
+    next(){this.show(this.i+1);}
+    prev(){this.show(this.i-1);}
+    keys(){
+        addEventListener('keydown',e=>{
+            if(e.target.getAttribute('contenteditable')==='true')return;
+            switch(e.key){
+                case 'ArrowLeft': case ' ': case 'PageDown': case 'ArrowDown':
+                    e.preventDefault(); this.next(); break;
+                case 'ArrowRight': case 'PageUp': case 'ArrowUp':
+                    e.preventDefault(); this.prev(); break;
+                case 'Home': this.show(0); break;
+                case 'End': this.show(this.slides.length-1); break;
+            }
+        });
+    }
+    wheel(){
+        let busy=false;
+        addEventListener('wheel',e=>{
+            if(this.locked||busy)return;
+            if(Math.abs(e.deltaY)<24)return;
+            busy=true; e.deltaY>0?this.next():this.prev();
+            setTimeout(()=>busy=false,700);
+        },{passive:true});
+    }
+    touch(){
+        let x0=null,y0=null;
+        addEventListener('touchstart',e=>{x0=e.touches[0].clientX;y0=e.touches[0].clientY;},{passive:true});
+        addEventListener('touchend',e=>{
+            if(x0===null)return;
+            const dx=e.changedTouches[0].clientX-x0, dy=e.changedTouches[0].clientY-y0;
+            if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)){
+                // RTL: swipe right -> previous, swipe left -> next
+                dx>0?this.prev():this.next();
+            }
+            x0=y0=null;
+        },{passive:true});
+    }
+}
+const deck=new SlidePresentation();
+
+/* ============================================================
+   INLINE EDITING — hover top-right or press E. Ctrl+S exports.
+   Edits persist to localStorage so they survive reloads.
+   ============================================================ */
+const editor={
+    isActive:false,
+    KEY:'fap-ch5-edits',
+    targets(){return [...document.querySelectorAll('h1,h2,h3,h4,p,li,cite,span.tag,.essence,.say,.ess,.kw,.en,.end-mark,.col-h')];},
+    toggle(){
+        this.isActive=!this.isActive;
+        deck.locked=this.isActive;
+        const btn=document.getElementById('editToggle');
+        btn.classList.toggle('active',this.isActive);
+        document.getElementById('editHint').style.display=this.isActive?'block':'none';
+        this.targets().forEach(el=>{
+            el.contentEditable=this.isActive;
+            if(this.isActive){el.addEventListener('blur',save,true);}
+        });
+        if(!this.isActive)persist();
+    }
+};
+function save(){/* debounce-light: persist on blur */ persist();}
+function persist(){
+    const map={};
+    editor.targets().forEach((el,idx)=>map[idx]=el.innerHTML);
+    try{localStorage.setItem(editor.KEY,JSON.stringify(map));}catch(e){}
+}
+function restore(){
+    try{
+        const map=JSON.parse(localStorage.getItem(editor.KEY)||'{}');
+        editor.targets().forEach((el,idx)=>{if(map[idx]!=null)el.innerHTML=map[idx];});
+    }catch(e){}
+}
+restore();
+
+/* export the edited deck as a fresh HTML file */
+function exportHTML(){
+    const clone=document.documentElement.cloneNode(true);
+    clone.querySelectorAll('[contenteditable]').forEach(el=>el.removeAttribute('contenteditable'));
+    const blob=new Blob(['<!DOCTYPE html>\n'+clone.outerHTML],{type:'text/html'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download='fap-chapter5-five-rules.html';
+    a.click();
+}
+
+/* edit affordances: hotzone hover (400ms grace), button, E key, Ctrl+S */
+const hotzone=document.querySelector('.edit-hotzone');
+const editToggle=document.getElementById('editToggle');
+let hideT=null;
+hotzone.addEventListener('mouseenter',()=>{clearTimeout(hideT);editToggle.classList.add('show');});
+hotzone.addEventListener('mouseleave',()=>{hideT=setTimeout(()=>{if(!editor.isActive)editToggle.classList.remove('show');},400);});
+editToggle.addEventListener('mouseenter',()=>clearTimeout(hideT));
+editToggle.addEventListener('mouseleave',()=>{hideT=setTimeout(()=>{if(!editor.isActive)editToggle.classList.remove('show');},400);});
+hotzone.addEventListener('click',()=>editor.toggle());
+editToggle.addEventListener('click',()=>editor.toggle());
+addEventListener('keydown',e=>{
+    if((e.key==='e'||e.key==='E')&&e.target.getAttribute('contenteditable')!=='true'){editor.toggle();}
+    if((e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();persist();exportHTML();}
+});
+</script>
+</body>
+</html>
