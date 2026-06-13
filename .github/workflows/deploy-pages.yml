@@ -1,0 +1,50 @@
+name: Deploy slides to GitHub Pages
+
+# Publishes the FAP Chapter 5 deck as a live site.
+# The deck is a single self-contained HTML file served as index.html.
+on:
+  workflow_dispatch:
+  push:
+    branches: [claude/frontend-slides-setup-qa6n0q]
+    paths:
+      - fap-chapter5-five-rules.html
+      - .github/workflows/deploy-pages.yml
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Assemble site
+        run: |
+          mkdir -p _site
+          # serve the deck as the landing page, and keep the named copy too
+          cp fap-chapter5-five-rules.html _site/index.html
+          cp fap-chapter5-five-rules.html _site/fap-chapter5-five-rules.html
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
