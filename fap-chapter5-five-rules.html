@@ -220,6 +220,53 @@ h2.h{font-size:74px;}
 .closing .end-mark{margin-top:60px;font-family:var(--font-serif);font-weight:900;font-size:30px;color:var(--crimson);letter-spacing:.3em;}
 
 /* ============================================================
+   SVG ILLUSTRATIONS & LOOPING MOTIFS  ("images & gifs")
+   All vector + CSS/SMIL — self-contained, no external assets.
+   ============================================================ */
+.stroke{fill:none;stroke:var(--crimson);stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round;}
+.stroke.soft{stroke:var(--ink-soft);stroke-width:2.6;}
+.fillc{fill:var(--crimson);}
+.fillp{fill:var(--paper);}
+
+@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes floaty{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
+@keyframes breathe{0%,100%{transform:scale(1);opacity:.92;}50%{transform:scale(1.07);opacity:1;}}
+
+/* draw-on for opener emblems (plays once when the slide reveals) */
+.slide.visible .draw{stroke-dasharray:760;stroke-dashoffset:760;animation:drawIn 1.5s var(--ease) .35s forwards;}
+@keyframes drawIn{to{stroke-dashoffset:0;}}
+
+/* opener emblem — sits in the empty upper-left of opener slides */
+.opener .emblem{position:absolute;top:150px;left:150px;width:300px;height:300px;}
+.opener .emblem .gently{transform-box:fill-box;transform-origin:center;animation:floaty 6s ease-in-out infinite;}
+
+/* title connection motif — two breathing nodes + thread (mid-left) */
+.t-motif{position:absolute;top:430px;left:150px;width:230px;height:230px;opacity:.9;}
+.t-motif .knot{transform-box:fill-box;transform-origin:center;animation:breathe 4.5s ease-in-out infinite;}
+
+/* CRB1 -> CRB2 transition arrow on the mechanism slide */
+.crb-flow{display:flex;align-items:center;justify-content:center;gap:0;margin:34px 0 4px;}
+.crb-arrow{width:300px;height:60px;}
+.crb-arrow .dash{stroke-dasharray:10 12;animation:flow 1.4s linear infinite;}
+@keyframes flow{to{stroke-dashoffset:-44;}}
+
+/* ===== ANIMATED 5-RULE CYCLE DIAGRAM (the centerpiece "gif") ===== */
+.cycle{flex:1;display:grid;grid-template-columns:620px 1fr;gap:70px;align-items:center;}
+.cycle svg{width:600px;height:600px;}
+.cycle .ring{fill:none;stroke:var(--line);stroke-width:3;stroke-dasharray:6 14;}
+.cycle .spinring{transform-box:fill-box;transform-origin:center;animation:spin 60s linear infinite;}
+.cycle .token{transform-box:view-box;transform-origin:300px 300px;animation:spin 12s linear infinite;}
+.cycle .node-c{fill:var(--paper-2);stroke:var(--crimson);stroke-width:3;}
+.cycle .node-n{fill:var(--crimson);font-family:var(--font-serif);font-weight:900;font-size:42px;text-anchor:middle;}
+.cycle .halo{fill:var(--crimson);opacity:0;}
+.cycle .legend{display:flex;flex-direction:column;gap:18px;}
+.cycle .legend .row{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:baseline;}
+.cycle .legend .b{font-family:var(--font-serif);font-weight:900;font-size:40px;color:var(--crimson);line-height:.9;width:48px;}
+.cycle .legend h4{font-family:var(--font-serif);font-weight:700;font-size:34px;}
+.cycle .legend .en{font-family:var(--font-en);font-style:italic;font-size:24px;color:var(--ink-faint);direction:ltr;}
+.cycle .legend p{font-size:24px;color:var(--ink-soft);line-height:1.35;}
+
+/* ============================================================
    ENTRANCE ANIMATIONS — staggered editorial reveals
    ============================================================ */
 .reveal{opacity:0;transform:translateY(28px);
@@ -267,7 +314,7 @@ h2.h{font-size:74px;}
 </head>
 <body>
 <div id="progress"></div>
-<div id="counter"><b id="cur">1</b> / <span id="tot">21</span></div>
+<div id="counter"><b id="cur">1</b> / <span id="tot">22</span></div>
 
 <div class="deck-viewport">
 <main class="deck-stage" id="deckStage">
@@ -275,6 +322,14 @@ h2.h{font-size:74px;}
     <!-- ===== SLIDE 1 — TITLE ===== -->
     <section class="slide title-slide active">
         <div class="pad">
+            <!-- connection motif: two presences, one thread -->
+            <svg class="t-motif" viewBox="0 0 230 230" aria-hidden="true">
+                <line class="stroke soft" x1="115" y1="46" x2="115" y2="184"/>
+                <g class="knot"><circle class="fillc" cx="115" cy="46" r="15"/>
+                    <circle class="stroke" cx="115" cy="46" r="28" opacity="0.5"/></g>
+                <g class="knot" style="animation-delay:-2.25s"><circle class="fillc" cx="115" cy="184" r="15"/>
+                    <circle class="stroke" cx="115" cy="184" r="28" opacity="0.5"/></g>
+            </svg>
             <header class="masthead reveal">
                 <span class="series"><b>FAP</b> Made Simple · סדרת לימוד קלינית</span>
                 <span class="chap">פרק חמישי</span>
@@ -390,9 +445,66 @@ h2.h{font-size:74px;}
         </div>
     </section>
 
+    <!-- ===== SLIDE 4b — ANIMATED CYCLE DIAGRAM (centerpiece motion) ===== -->
+    <section class="slide">
+        <div class="pad">
+            <div class="head-row reveal">
+                <span class="crumb"><span class="n">↻</span><span class="sep"></span>מחזור התהליך</span>
+                <div class="top"><h2 class="h">תהליך מתמשך, רגע אחר רגע</h2></div>
+                <div class="divider"></div>
+            </div>
+            <div class="body cycle">
+                <!-- looping SVG "gif": a moment-token orbits the five rules clockwise -->
+                <div class="reveal" style="display:flex;justify-content:center;">
+                <svg viewBox="0 0 600 600" role="img" aria-label="מחזור חמשת כללי FAP">
+                    <!-- ambient slowly-rotating dashed ring -->
+                    <circle class="ring spinring" cx="300" cy="300" r="210"/>
+                    <!-- five rule nodes -->
+                    <g>
+                        <circle class="node-c" cx="300" cy="90"  r="48"/><text class="node-n" x="300" y="105">1</text>
+                        <circle class="node-c" cx="500" cy="235" r="48"/><text class="node-n" x="500" y="250">2</text>
+                        <circle class="node-c" cx="423" cy="470" r="48"/><text class="node-n" x="423" y="485">3</text>
+                        <circle class="node-c" cx="177" cy="470" r="48"/><text class="node-n" x="177" y="485">4</text>
+                        <circle class="node-c" cx="100" cy="235" r="48"/><text class="node-n" x="100" y="250">5</text>
+                    </g>
+                    <!-- center mark -->
+                    <text x="300" y="292" text-anchor="middle" style="font-family:var(--font-serif);font-weight:900;font-size:48px;fill:var(--ink);">FAP</text>
+                    <text x="300" y="332" text-anchor="middle" style="font-family:var(--font-sans);font-weight:500;font-size:23px;fill:var(--ink-soft);letter-spacing:.12em;">כאן · ועכשיו</text>
+                    <!-- the orbiting "moment" — travels the ring, lands on each rule -->
+                    <g class="token">
+                        <circle cx="300" cy="90" r="40" class="fillc" opacity="0.22">
+                            <animate attributeName="r" values="34;52;34" dur="1.7s" repeatCount="indefinite"/>
+                            <animate attributeName="opacity" values="0.28;0.05;0.28" dur="1.7s" repeatCount="indefinite"/>
+                        </circle>
+                        <circle cx="300" cy="90" r="20" class="fillc"/>
+                    </g>
+                </svg>
+                </div>
+                <!-- legend -->
+                <div class="legend reveal">
+                    <div class="row"><span class="b">1</span><div><h4>שים לב <span class="en">Notice</span></h4><p>לראות את ה־CRB ברגע התרחשותו.</p></div></div>
+                    <div class="row"><span class="b">2</span><div><h4>עורר <span class="en">Evoke</span></h4><p>ליצור את ההקשר שבו הוא מופיע.</p></div></div>
+                    <div class="row"><span class="b">3</span><div><h4>חזק <span class="en">Reinforce</span></h4><p>לעצב את ה־CRB2 שצומח.</p></div></div>
+                    <div class="row"><span class="b">4</span><div><h4>שים לב להשפעתך <span class="en">Notice Effect</span></h4><p>לעקוב אחר המגמה לאורך זמן.</p></div></div>
+                    <div class="row"><span class="b">5</span><div><h4>תמוך בהכללה <span class="en">Generalize</span></h4><p>להעביר את הנלמד אל החיים.</p></div></div>
+                </div>
+            </div>
+            <div class="foot"><span class="brand"><b>FAP</b> Made Simple · פרק 5</span><span>מחזור התהליך</span></div>
+        </div>
+    </section>
+
     <!-- ===== SLIDE 5 — RULE 1 OPENER ===== -->
     <section class="slide opener">
         <div class="pad">
+            <!-- emblem: an awareness eye -->
+            <svg class="emblem" viewBox="0 0 300 300" aria-hidden="true">
+                <g class="gently">
+                    <path class="stroke draw" d="M36 150 Q150 64 264 150 Q150 236 36 150 Z"/>
+                    <circle class="stroke" cx="150" cy="150" r="34"/>
+                    <circle class="fillc" cx="150" cy="150" r="13"/>
+                    <path class="stroke soft" d="M150 44 V18 M150 256 V282 M44 150 H18 M256 150 H282"/>
+                </g>
+            </svg>
             <div class="opener-grid">
                 <div class="rule-num reveal">1<span dir="ltr">/5</span></div>
                 <div>
@@ -483,6 +595,19 @@ h2.h{font-size:74px;}
     <!-- ===== SLIDE 8 — RULE 2 OPENER ===== -->
     <section class="slide opener">
         <div class="pad">
+            <!-- emblem: ripples evoked from a spark -->
+            <svg class="emblem" viewBox="0 0 300 300" aria-hidden="true">
+                <circle class="fillc" cx="150" cy="150" r="16"/>
+                <circle class="stroke" cx="150" cy="150" r="42"/>
+                <circle class="stroke soft" cx="150" cy="150" r="30">
+                    <animate attributeName="r" values="30;130" dur="2.8s" repeatCount="indefinite"/>
+                    <animate attributeName="opacity" values="0.85;0" dur="2.8s" repeatCount="indefinite"/>
+                </circle>
+                <circle class="stroke soft" cx="150" cy="150" r="30">
+                    <animate attributeName="r" values="30;130" dur="2.8s" begin="1.4s" repeatCount="indefinite"/>
+                    <animate attributeName="opacity" values="0.85;0" dur="2.8s" begin="1.4s" repeatCount="indefinite"/>
+                </circle>
+            </svg>
             <div class="opener-grid">
                 <div class="rule-num reveal">2<span dir="ltr">/5</span></div>
                 <div>
@@ -571,6 +696,15 @@ h2.h{font-size:74px;}
     <!-- ===== SLIDE 11 — RULE 3 OPENER ===== -->
     <section class="slide opener">
         <div class="pad">
+            <!-- emblem: a pulsing heart of concentric rings -->
+            <svg class="emblem" viewBox="0 0 300 300" aria-hidden="true">
+                <g style="transform-box:fill-box;transform-origin:center;animation:breathe 3s ease-in-out infinite;">
+                    <circle class="stroke soft" cx="150" cy="150" r="96"/>
+                    <circle class="stroke soft" cx="150" cy="150" r="64"/>
+                    <circle class="stroke" cx="150" cy="150" r="32"/>
+                    <circle class="fillc" cx="150" cy="150" r="15"/>
+                </g>
+            </svg>
             <div class="opener-grid">
                 <div class="rule-num reveal">3<span dir="ltr">/5</span></div>
                 <div>
@@ -654,6 +788,14 @@ h2.h{font-size:74px;}
     <!-- ===== SLIDE 14 — RULE 4 OPENER ===== -->
     <section class="slide opener">
         <div class="pad">
+            <!-- emblem: CRB2 rising, CRB1 falling over time -->
+            <svg class="emblem" viewBox="0 0 300 300" aria-hidden="true">
+                <path class="stroke soft" d="M44 40 V258 H282"/>
+                <path class="stroke draw" d="M58 232 C120 212 150 120 274 66"/>
+                <path class="stroke soft" d="M58 96 C140 134 196 220 274 244" style="stroke-dasharray:7 10;"/>
+                <circle class="fillc" cx="274" cy="66" r="10"/>
+                <circle class="fillp stroke" cx="274" cy="244" r="9"/>
+            </svg>
             <div class="opener-grid">
                 <div class="rule-num reveal">4<span dir="ltr">/5</span></div>
                 <div>
@@ -714,6 +856,19 @@ h2.h{font-size:74px;}
     <!-- ===== SLIDE 16 — RULE 5 OPENER ===== -->
     <section class="slide opener">
         <div class="pad">
+            <!-- emblem: from the room, outward into life -->
+            <svg class="emblem" viewBox="0 0 300 300" aria-hidden="true">
+                <circle class="stroke soft" cx="150" cy="150" r="120" style="stroke-dasharray:5 13;"/>
+                <circle class="stroke" cx="150" cy="150" r="44"/>
+                <circle class="fillc" cx="150" cy="150" r="14"/>
+                <!-- particles spreading from room to world -->
+                <g class="fillc">
+                    <circle r="7"><animate attributeName="cx" values="150;232" dur="2.6s" repeatCount="indefinite"/><animate attributeName="cy" values="150;72" dur="2.6s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;0" dur="2.6s" repeatCount="indefinite"/></circle>
+                    <circle r="7"><animate attributeName="cx" values="150;232" dur="2.6s" begin="0.65s" repeatCount="indefinite"/><animate attributeName="cy" values="150;228" dur="2.6s" begin="0.65s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;0" dur="2.6s" begin="0.65s" repeatCount="indefinite"/></circle>
+                    <circle r="7"><animate attributeName="cx" values="150;68" dur="2.6s" begin="1.3s" repeatCount="indefinite"/><animate attributeName="cy" values="150;228" dur="2.6s" begin="1.3s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;0" dur="2.6s" begin="1.3s" repeatCount="indefinite"/></circle>
+                    <circle r="7"><animate attributeName="cx" values="150;68" dur="2.6s" begin="1.95s" repeatCount="indefinite"/><animate attributeName="cy" values="150;72" dur="2.6s" begin="1.95s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;0" dur="2.6s" begin="1.95s" repeatCount="indefinite"/></circle>
+                </g>
+            </svg>
             <div class="opener-grid">
                 <div class="rule-num reveal">5<span dir="ltr">/5</span></div>
                 <div>
