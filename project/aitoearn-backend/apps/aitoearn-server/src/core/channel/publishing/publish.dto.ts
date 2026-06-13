@@ -119,6 +119,13 @@ export const pinterestPublishOptionSchema = z.object({
   boardId: z.string().optional(),
 })
 
+export const MusicAssistantPublishOptionSchema = z.object({
+  baseUrl: z.url().describe('Music Assistant 服务器地址，例如 http://192.168.1.10:8095'),
+  token: z.string().optional().describe('Music Assistant 访问令牌（可选）'),
+  playerId: z.string().describe('目标播放器 ID'),
+  mode: z.enum(['play', 'replace', 'next', 'add']).optional().default('play').describe('入队方式'),
+})
+
 export const TiktokPublishOptionSchema = z.object({
   privacy_level: z.enum(['PUBLIC_TO_EVERYONE', 'MUTUAL_FOLLOW_FRIENDS', 'SELF_ONLY', 'FOLLOWER_OF_CREATOR']),
   disable_duet: z.boolean().optional(),
@@ -174,6 +181,7 @@ export const CreatePublishSchema = z.object({
     tiktok: TiktokPublishOptionSchema.optional(),
     googleBusiness: GoogleBusinessPublishOptionSchema.optional(),
     twitter: TwitterPublishOptionSchema.optional(),
+    musicAssistant: MusicAssistantPublishOptionSchema.optional(),
   }).optional(),
 })
 export class CreatePublishDto extends createZodDto(CreatePublishSchema) { }

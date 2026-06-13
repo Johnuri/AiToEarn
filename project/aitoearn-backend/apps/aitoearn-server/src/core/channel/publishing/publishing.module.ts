@@ -7,6 +7,7 @@ import { DouyinModule } from '../platforms/douyin/douyin.module'
 import { GoogleBusinessModule } from '../platforms/google-business/google-business.module'
 import { KwaiModule } from '../platforms/kwai/kwai.module'
 import { MetaModule } from '../platforms/meta/meta.module'
+import { MusicAssistantModule } from '../platforms/music-assistant/music-assistant.module'
 import { PinterestModule } from '../platforms/pinterest/pinterest.module'
 import { TiktokModule } from '../platforms/tiktok/tiktok.module'
 import { TwitterModule } from '../platforms/twitter/twitter.module'
@@ -25,6 +26,7 @@ import { GoogleBusinessPubService } from './providers/google-business.service'
 import { InstagramPublishService } from './providers/instgram.service'
 import { kwaiPubService } from './providers/kwai.service'
 import { LinkedinPublishService } from './providers/linkedin.service'
+import { MusicAssistantPubService } from './providers/music-assistant.service'
 import { PinterestPubService } from './providers/pinterest.service'
 import { ThreadsPublishService } from './providers/threads.service'
 import { TiktokPubService } from './providers/tiktok.service'
@@ -50,6 +52,7 @@ import { PublishingStatusWatchdogScheduler } from './scheduler/publishing-status
     PinterestModule,
     DouyinModule,
     GoogleBusinessModule,
+    MusicAssistantModule,
   ],
   providers: [
     CredentialInvalidationService,
@@ -72,6 +75,7 @@ import { PublishingStatusWatchdogScheduler } from './scheduler/publishing-status
     TwitterPubService,
     DouyinPubService,
     GoogleBusinessPubService,
+    MusicAssistantPubService,
     EnqueuePublishingTaskScheduler,
     PublishingStatusWatchdogScheduler,
     {
@@ -90,6 +94,7 @@ import { PublishingStatusWatchdogScheduler } from './scheduler/publishing-status
         douyin: DouyinPubService,
         googleBusiness: GoogleBusinessPubService,
         wxGzh: WxGzhPubService,
+        musicAssistant: MusicAssistantPubService,
       ) => ({
         [AccountType.BILIBILI]: bilibili,
         [AccountType.KWAI]: kwai,
@@ -104,6 +109,7 @@ import { PublishingStatusWatchdogScheduler } from './scheduler/publishing-status
         [AccountType.Douyin]: douyin,
         [AccountType.GOOGLE_BUSINESS]: googleBusiness,
         [AccountType.WxGzh]: wxGzh,
+        [AccountType.MUSIC_ASSISTANT]: musicAssistant,
       }),
       inject: [
         BilibiliPubService,
@@ -119,6 +125,7 @@ import { PublishingStatusWatchdogScheduler } from './scheduler/publishing-status
         DouyinPubService,
         GoogleBusinessPubService,
         WxGzhPubService,
+        MusicAssistantPubService,
       ],
     },
   ],

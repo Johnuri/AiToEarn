@@ -14,4 +14,5 @@ export enum AccountType {
   PINTEREST = 'pinterest', // pinterest
   LINKEDIN = 'linkedin', // linkedin
   GOOGLE_BUSINESS = 'google_business', // Google Business Profile
+  MUSIC_ASSISTANT = 'music_assistant', // Music Assistant 自托管音乐服务器
 }

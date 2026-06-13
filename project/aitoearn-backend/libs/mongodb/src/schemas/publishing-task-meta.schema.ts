@@ -98,6 +98,21 @@ export class WxGzhPublishTaskMeta {
 }
 
 @Schema({})
+export class MusicAssistantPublishTaskMeta {
+  @Prop({ required: true })
+  baseUrl: string
+
+  @Prop({ required: false })
+  token?: string
+
+  @Prop({ required: true })
+  playerId: string
+
+  @Prop({ required: false })
+  mode?: 'play' | 'replace' | 'next' | 'add'
+}
+
+@Schema({})
 export class PublishingTaskMeta {
   @Prop({ required: false })
   bilibili?: BiliBiliPublishTaskMeta
@@ -122,6 +137,9 @@ export class PublishingTaskMeta {
 
   @Prop({ required: false })
   wxGzh?: WxGzhPublishTaskMeta
+
+  @Prop({ required: false })
+  musicAssistant?: MusicAssistantPublishTaskMeta
 }
 
 @Schema({})
