@@ -59,6 +59,15 @@ img,video,canvas,svg{max-width:100%;max-height:100%;}
     .deck-controls{display:none!important;}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.2s!important;}}
+/* keep the exported/print PDF small: drop heavy raster layers (grain + blurred orbs) */
+@media print{
+    .slide.scene::before{display:none!important;}
+    .scene .orbs{display:none!important;}
+    /* every slide prints, so force revealed content visible (not just the active one) */
+    .slide .reveal,.slide .stag>*{opacity:1!important;transform:none!important;}
+    /* hide live UI chrome from the static export */
+    #counter,#progress,.edit-hotzone,.edit-toggle,#editHint{display:none!important;}
+}
 
 /* ============================================================
    GLOBAL SLIDE CANVAS — paper grain + faint accent glow
