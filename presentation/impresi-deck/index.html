@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AiToEarn — Impresi Presentation</title>
+  <style>
+    html, body { margin: 0; padding: 0; height: 100%; background: #0d1117; }
+    #board { width: 100vw; height: 100vh; }
+    /* Small hint shown until the user starts navigating */
+    #hint {
+      position: fixed; bottom: 18px; left: 0; right: 0;
+      text-align: center; color: rgba(255,255,255,0.55);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 14px; letter-spacing: 0.04em; z-index: 9999;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="board"></div>
+  <div id="hint">Use → / Space to advance · ← to go back</div>
+
+  <!-- Impresi from CDN -->
+  <script src="https://unpkg.com/impresi"></script>
+  <script>
+    // Slide deck describing the AiToEarn project, built with Impresi.
+    // Each "screen" displays a set of items (in) and removes the previous ones (out).
+    var config = {
+      resources: [
+        // ---------- Slide 1: Title ----------
+        { id: "bg1", type: "background", options: { backgroundColor: "#0d1117" } },
+        { id: "s1-title", type: "heading", text: "AiToEarn",
+          options: { fontSize: 9, fontColor: "#58a6ff", backgroundColor: "transparent",
+            inAnimationName: "zoomIn", x: 30, y: 28 } },
+        { id: "s1-sub", type: "blurb",
+          text: "AI Content Marketing Agent for the One-Person Company",
+          options: { fontSize: 3, fontColor: "#c9d1d9", backgroundColor: "transparent",
+            inAnimationName: "fadeInUp", x: 22, y: 48 } },
+        { id: "s1-tag", type: "blurb",
+          text: "Monetize · Publish · Engage · Create",
+          options: { fontSize: 2.4, fontColor: "#3fb950", backgroundColor: "transparent",
+            inAnimationName: "fadeIn", x: 30, y: 62 } },
+
+        // ---------- Slide 2: What is it ----------
+        { id: "bg2", type: "background", options: { backgroundColor: "#161b22" } },
+        { id: "s2-h", type: "heading", text: "One platform, every channel",
+          options: { fontSize: 5, fontColor: "#fff", backgroundColor: "transparent",
+            inAnimationName: "slideInLeft", x: 10, y: 16 } },
+        { id: "s2-b", type: "blurb",
+          text: "AiToEarn helps creators, brands and solo founders build, distribute and monetize content across the world's major platforms — automated by AI Agents.",
+          options: { fontSize: 2.6, fontColor: "#c9d1d9", backgroundColor: "transparent",
+            width: 50, inAnimationName: "fadeInUp", x: 10, y: 34 } },
+        { id: "s2-img", type: "image", src: "../channel-cn.png",
+          options: { width: 30, inAnimationName: "slideInRight", x: 60, y: 28 } },
+
+        // ---------- Slide 3: Monetize ----------
+        { id: "bg3", type: "background", options: { backgroundColor: "#1c2128" } },
+        { id: "s3-h", type: "heading", text: "Monetize",
+          options: { fontSize: 6, fontColor: "#f0883e", backgroundColor: "transparent",
+            inAnimationName: "slideInDown", x: 10, y: 12 } },
+        { id: "s3-b", type: "blurb",
+          text: "Turn content into income through the marketplace and OpenClaw earning tasks.",
+          options: { fontSize: 2.6, fontColor: "#c9d1d9", backgroundColor: "transparent",
+            width: 38, inAnimationName: "fadeInUp", x: 10, y: 28 } },
+        { id: "s3-img", type: "image", src: "../monetize-cn.png",
+          options: { width: 40, inAnimationName: "zoomIn", x: 52, y: 24 } },
+
+        // ---------- Slide 4: Publish ----------
+        { id: "bg4", type: "background", options: { backgroundColor: "#161b22" } },
+        { id: "s4-h", type: "heading", text: "Publish",
+          options: { fontSize: 6, fontColor: "#58a6ff", backgroundColor: "transparent",
+            inAnimationName: "slideInDown", x: 10, y: 12 } },
+        { id: "s4-b", type: "blurb",
+          text: "One-click distribution to TikTok, YouTube, Instagram, X, Rednote, Douyin and more.",
+          options: { fontSize: 2.6, fontColor: "#c9d1d9", backgroundColor: "transparent",
+            width: 38, inAnimationName: "fadeInUp", x: 10, y: 28 } },
+        { id: "s4-img", type: "image", src: "../publish-cn.png",
+          options: { width: 40, inAnimationName: "zoomIn", x: 52, y: 24 } },
+
+        // ---------- Slide 5: Engage ----------
+        { id: "bg5", type: "background", options: { backgroundColor: "#1c2128" } },
+        { id: "s5-h", type: "heading", text: "Engage",
+          options: { fontSize: 6, fontColor: "#a371f7", backgroundColor: "transparent",
+            inAnimationName: "slideInDown", x: 10, y: 12 } },
+        { id: "s5-b", type: "blurb",
+          text: "Search hotspots, monitor comments and interact at scale across every channel.",
+          options: { fontSize: 2.6, fontColor: "#c9d1d9", backgroundColor: "transparent",
+            width: 38, inAnimationName: "fadeInUp", x: 10, y: 28 } },
+        { id: "s5-img", type: "image", src: "../engage-thumbnail-cn.png",
+          options: { width: 40, inAnimationName: "zoomIn", x: 52, y: 24 } },
+
+        // ---------- Slide 6: Create ----------
+        { id: "bg6", type: "background", options: { backgroundColor: "#161b22" } },
+        { id: "s6-h", type: "heading", text: "Create",
+          options: { fontSize: 6, fontColor: "#3fb950", backgroundColor: "transparent",
+            inAnimationName: "slideInDown", x: 10, y: 12 } },
+        { id: "s6-b", type: "blurb",
+          text: "AI Agents generate video and image drafts in batches — multi-model, reference-aware.",
+          options: { fontSize: 2.6, fontColor: "#c9d1d9", backgroundColor: "transparent",
+            width: 38, inAnimationName: "fadeInUp", x: 10, y: 28 } },
+        { id: "s6-img", type: "image", src: "../agent_0.png",
+          options: { width: 40, inAnimationName: "zoomIn", x: 52, y: 24 } },
+
+        // ---------- Slide 7: Ways to use ----------
+        { id: "bg7", type: "background", options: { backgroundColor: "#0d1117" } },
+        { id: "s7-h", type: "heading", text: "5 ways to get started",
+          options: { fontSize: 5, fontColor: "#fff", backgroundColor: "transparent",
+            inAnimationName: "slideInLeft", x: 10, y: 14 } },
+        { id: "s7-b1", type: "blurb", text: "1 · Open the website — no setup",
+          options: { fontSize: 2.6, fontColor: "#c9d1d9", backgroundColor: "transparent",
+            inAnimationName: "fadeInUp", x: 12, y: 30 } },
+        { id: "s7-b2", type: "blurb", text: "2 · Use inside OpenClaw",
+          options: { fontSize: 2.6, fontColor: "#c9d1d9", backgroundColor: "transparent",
+            inAnimationName: "fadeInUp", x: 12, y: 42 } },
+        { id: "s7-b3", type: "blurb", text: "3 · Use in Claude / Cursor via MCP",
+          options: { fontSize: 2.6, fontColor: "#c9d1d9", backgroundColor: "transparent",
+            inAnimationName: "fadeInUp", x: 12, y: 54 } },
+        { id: "s7-b4", type: "blurb", text: "4 · One-click Docker deploy",
+          options: { fontSize: 2.6, fontColor: "#c9d1d9", backgroundColor: "transparent",
+            inAnimationName: "fadeInUp", x: 12, y: 66 } },
+        { id: "s7-b5", type: "blurb", text: "5 · Build from source",
+          options: { fontSize: 2.6, fontColor: "#c9d1d9", backgroundColor: "transparent",
+            inAnimationName: "fadeInUp", x: 12, y: 78 } },
+
+        // ---------- Slide 8: Closing ----------
+        { id: "bg8", type: "background", options: { backgroundColor: "#0d1117" } },
+        { id: "s8-h", type: "heading", text: "Start earning with AI",
+          options: { fontSize: 6, fontColor: "#58a6ff", backgroundColor: "transparent",
+            inAnimationName: "zoomIn", x: 20, y: 34 } },
+        { id: "s8-b", type: "blurb", text: "aitoearn.ai",
+          options: { fontSize: 3.2, fontColor: "#3fb950", backgroundColor: "transparent",
+            inAnimationName: "fadeInUp", x: 40, y: 54 } }
+      ],
+
+      actions: [
+        // screen 1
+        { in: ["bg1", "s1-title", "s1-sub", "s1-tag"] },
+        // screen 2
+        { out: ["bg1", "s1-title", "s1-sub", "s1-tag"] },
+        { in: ["bg2", "s2-h", "s2-b", "s2-img"] },
+        // screen 3
+        { out: ["bg2", "s2-h", "s2-b", "s2-img"] },
+        { in: ["bg3", "s3-h", "s3-b", "s3-img"] },
+        // screen 4
+        { out: ["bg3", "s3-h", "s3-b", "s3-img"] },
+        { in: ["bg4", "s4-h", "s4-b", "s4-img"] },
+        // screen 5
+        { out: ["bg4", "s4-h", "s4-b", "s4-img"] },
+        { in: ["bg5", "s5-h", "s5-b", "s5-img"] },
+        // screen 6
+        { out: ["bg5", "s5-h", "s5-b", "s5-img"] },
+        { in: ["bg6", "s6-h", "s6-b", "s6-img"] },
+        // screen 7
+        { out: ["bg6", "s6-h", "s6-b", "s6-img"] },
+        { in: ["bg7", "s7-h", "s7-b1", "s7-b2", "s7-b3", "s7-b4", "s7-b5"] },
+        // screen 8
+        { out: ["bg7", "s7-h", "s7-b1", "s7-b2", "s7-b3", "s7-b4", "s7-b5"] },
+        { in: ["bg8", "s8-h", "s8-b"] }
+      ]
+    };
+
+    var impresi = new Impresi("board", config);
+    impresi.start();
+
+    // Hide the navigation hint once the user starts moving through slides.
+    document.addEventListener("keyup", function () {
+      var hint = document.getElementById("hint");
+      if (hint) hint.style.display = "none";
+    });
+  </script>
+</body>
+</html>
