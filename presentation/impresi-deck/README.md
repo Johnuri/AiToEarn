@@ -1,13 +1,13 @@
-# AiToEarn — Impresi Slide Deck
+# Functional Analytic Psychotherapy (FAP) — Impresi Slide Deck
 
-An animated slide presentation about **AiToEarn**, built with the
-[Impresi](https://github.com/richjava/impresi) JavaScript library.
+An animated slide presentation introducing **Functional Analytic Psychotherapy
+(FAP)**, built with the [Impresi](https://github.com/richjava/impresi)
+JavaScript library.
 
 ## View it
 
-It's a self-contained page that loads Impresi from a CDN and uses the images
-bundled in the local `img/` folder. Serve it over HTTP (some browsers block the
-CDN script and local images when opening the file directly):
+It's a single self-contained page that loads Impresi from a CDN. Serve it over
+HTTP (some browsers block the CDN script when opening the file directly):
 
 ```bash
 # from the repository root
@@ -25,19 +25,19 @@ python3 -m http.server 8000
 
 ## Slides
 
-1. Title — AiToEarn
-2. One platform, every channel
-3. Monetize
-4. Publish
-5. Engage
-6. Create
-7. 5 ways to get started
-8. Closing — aitoearn.ai
+1. Title — Functional Analytic Psychotherapy
+2. What is FAP?
+3. Clinically Relevant Behaviors (CRB1 / CRB2 / CRB3)
+4. The Five Rules
+5. Natural reinforcement
+6. The ACL model — Awareness · Courage · Love
+7. Why it matters
+8. Closing — "The relationship is the treatment."
 
 ## Editing
 
 All content lives in the `config` object in `index.html`. Each slide is a set of
-`resources` (background / heading / blurb / image) sequenced by the `actions`
-array, where each "screen" brings the previous slide's items `out` and the new
-slide's items `in`. Animations use [Animate.css](https://animate.style/) class
-names (`fadeInUp`, `zoomIn`, `slideInLeft`, …).
+`resources` (background / heading / blurb) sequenced by the `actions` array,
+where each "screen" brings the previous slide's items `out` and the new slide's
+items `in`. Animations use [Animate.css](https://animate.style/) class names
+(`fadeInUp`, `zoomIn`, `slideInLeft`, …).
