@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>חמשת כללי ה־FAP · עיצוב התהליך — פרק 5</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Hebrew warm/playful pairing: Suez One (display) + Varela Round (body) -->
+<link href="https://fonts.googleapis.com/css2?family=Suez+One&family=Varela+Round&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* === CSS VARIABLES === */
+:root{
+    --cream:#FAF3E8; --pink-bg:#F9E4E0; --green-bg:#D8F0CC; --blue-bg:#D0E3F5; --yellow-bg:#FFF8DC; --gray-bg:#F0EFED;
+    --text:#2D2A26; --text-muted:#6B6560;
+    --pink-marker:#F7A8C4; --green-marker:#7BC47F; --red-marker:#E8847A;
+    --purple-accent:#7C5CFC;
+    --display:'Suez One', serif;
+    --body:'Varela Round', sans-serif;
+    --mono:'JetBrains Mono', monospace;
+}
+
+/* === VIEWPORT BASE (from viewport-base.css, full) === */
+html,body{height:100%;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:var(--slide-padding);text-align:center;overflow:hidden;opacity:0;pointer-events:none;transition:opacity .5s cubic-bezier(.4,0,.2,1);}
+.slide.active{opacity:1;pointer-events:auto;}
+:root{
+    --title-big:clamp(2.5rem,5.5vw,4.5rem);
+    --title-medium:clamp(1.8rem,3.8vw,3.2rem);
+    --body-size:clamp(1.1rem,1.8vw,1.4rem);
+    --small-size:clamp(0.9rem,1.2vw,1.1rem);
+    --slide-padding:clamp(2rem,6vh,6vh) clamp(2rem,8vw,8vw);
+    --content-gap:clamp(0.5rem,2vw,2rem);
+}
+.dashed-card,.col-card,.lesson-rtl,.rules-list,.stats-row{max-width:min(92vw,820px);}
+img{max-width:100%;max-height:min(50vh,400px);object-fit:contain;}
+.slide.active .reveal{animation:fadeUp .6s cubic-bezier(.16,1,.3,1) both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.slide.active .reveal:nth-child(1){animation-delay:.08s;}
+.slide.active .reveal:nth-child(2){animation-delay:.18s;}
+.slide.active .reveal:nth-child(3){animation-delay:.28s;}
+.slide.active .reveal:nth-child(4){animation-delay:.38s;}
+.slide.active .reveal:nth-child(5){animation-delay:.48s;}
+.slide.active .reveal:nth-child(6){animation-delay:.58s;}
+.slide.active .reveal:nth-child(7){animation-delay:.68s;}
+@media (max-height:700px){:root{--slide-padding:clamp(1rem,4vh,4vh) clamp(1.5rem,6vw,6vw);--title-big:clamp(2rem,5vw,3.5rem);--title-medium:clamp(1.5rem,3.2vw,2.5rem);}}
+@media (max-height:600px){:root{--slide-padding:clamp(.75rem,3vh,3vh) clamp(1rem,5vw,5vw);--title-big:clamp(1.5rem,4.5vw,2.5rem);--body-size:clamp(.8rem,1.4vw,1.1rem);}.wavy-bg,.deco-q{display:none;}}
+@media (max-height:500px){:root{--title-big:clamp(1.2rem,4vw,2rem);--title-medium:clamp(1rem,3vw,1.5rem);--body-size:clamp(.7rem,1.2vw,.9rem);}}
+@media (max-width:768px){.slide{padding:4vh 5vw;}.two-col{grid-template-columns:1fr;gap:1.2rem;}.stats-row{gap:1rem;}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.2s!important;}}
+
+/* === BODY === */
+body{font-family:var(--body);color:var(--text);background:var(--cream);}
+.slide>*:not(.wavy-bg):not(.deco-q){position:relative;z-index:1;}
+
+/* === TYPOGRAPHY === */
+.big-title{font-family:var(--display);font-weight:400;font-size:var(--title-big);line-height:1.25;color:var(--text);}
+.medium-title{font-family:var(--display);font-weight:400;font-size:var(--title-medium);line-height:1.3;color:var(--text);}
+.body-text{font-weight:400;font-size:var(--body-size);line-height:1.75;color:var(--text-muted);max-width:34ch;}
+.small-text{font-weight:400;font-size:var(--small-size);line-height:1.7;color:var(--text-muted);}
+.kicker{font-family:var(--body);font-weight:700;font-size:clamp(.8rem,1.4vw,1.05rem);letter-spacing:.06em;color:var(--purple-accent);}
+.stack{display:flex;flex-direction:column;align-items:center;gap:var(--content-gap);}
+
+/* === MARKER HIGHLIGHTS === */
+.hl-pink{background:linear-gradient(180deg,transparent 52%,var(--pink-marker) 52%,var(--pink-marker) 92%,transparent 92%);padding:0 6px;}
+.hl-green{background:linear-gradient(180deg,transparent 52%,var(--green-marker) 52%,var(--green-marker) 92%,transparent 92%);padding:0 6px;}
+.hl-red{background:linear-gradient(180deg,transparent 52%,var(--red-marker) 52%,var(--red-marker) 92%,transparent 92%);padding:0 6px;}
+
+/* === TAGS / PILLS === */
+.tag{display:inline-block;padding:7px 22px;border-radius:100px;font-family:var(--body);font-weight:700;font-size:clamp(.8rem,1.3vw,1rem);background:rgba(124,92,252,.12);color:var(--purple-accent);}
+.tag-good{background:rgba(123,196,127,.18);color:#4a9e50;}
+.tag-bad{background:rgba(232,132,122,.18);color:#c0564c;}
+
+/* === DASHED CARD === */
+.dashed-card{border:2.5px dashed var(--purple-accent);border-radius:18px;padding:clamp(1.2rem,2.5vw,2rem) clamp(1.4rem,3vw,2.6rem);background:#fff;width:100%;}
+.dashed-card p{font-size:clamp(1rem,1.7vw,1.35rem);line-height:1.7;color:var(--text);}
+
+/* === STAT / CRB BOXES === */
+.stats-row{display:flex;gap:clamp(1rem,3vw,2.6rem);margin-top:.5rem;flex-wrap:wrap;justify-content:center;width:100%;}
+.stat-box{background:#fff;border:2.5px dashed var(--purple-accent);border-radius:18px;padding:clamp(1rem,2vw,1.6rem) clamp(1.2rem,2.4vw,2rem);min-width:clamp(180px,22vw,250px);}
+.stat-box .num{font-family:var(--display);font-size:clamp(1.6rem,3.2vw,2.6rem);color:var(--purple-accent);line-height:1;}
+.stat-box .label{font-weight:700;font-size:clamp(1rem,1.6vw,1.3rem);color:var(--text);margin-top:.5rem;}
+.stat-box .desc{font-size:clamp(.82rem,1.2vw,1rem);color:var(--text-muted);margin-top:.4rem;line-height:1.45;}
+
+/* === TWO COLUMN === */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:clamp(1.2rem,3vw,2.2rem);margin-top:.5rem;max-width:min(92vw,860px);width:100%;}
+.col-card{background:#fff;border:2.5px dashed #ccc;border-radius:18px;padding:clamp(1.2rem,2.4vw,2rem);text-align:start;}
+.col-card.green{border-color:var(--green-marker);}
+.col-card.red{border-color:var(--red-marker);}
+.col-card h3{font-family:var(--display);font-weight:400;font-size:clamp(1.2rem,2.2vw,1.8rem);margin-bottom:.7rem;}
+.col-card p{font-size:clamp(.92rem,1.5vw,1.2rem);line-height:1.6;color:var(--text-muted);}
+
+/* === LESSON CALLOUT (RTL) === */
+.lesson-rtl{margin-top:.5rem;padding:1.2rem 1.6rem;border-right:5px solid var(--purple-accent);background:rgba(124,92,252,.07);border-radius:14px 0 0 14px;width:100%;text-align:start;}
+.lesson-rtl p{font-size:clamp(1rem,1.5vw,1.25rem);color:var(--text);line-height:1.7;font-weight:700;}
+
+/* === RULES OVERVIEW LIST === */
+.rules-list{display:flex;flex-direction:column;gap:clamp(.5rem,1.4vh,1.1rem);width:100%;margin-top:.5rem;}
+.rule-row{display:grid;grid-template-columns:auto 1fr auto;gap:1.2rem;align-items:center;background:#fff;border:2.5px dashed #d8d2e8;border-radius:16px;padding:clamp(.7rem,1.6vw,1.15rem) clamp(1rem,2.2vw,1.8rem);text-align:start;}
+.rule-row .rn{font-family:var(--display);font-size:clamp(1.5rem,2.8vw,2.3rem);color:var(--purple-accent);line-height:1;}
+.rule-row .nm{font-family:var(--display);font-size:clamp(1.1rem,2vw,1.6rem);color:var(--text);}
+.rule-row .es{font-family:var(--body);font-size:clamp(.82rem,1.3vw,1.05rem);color:var(--text-muted);}
+.rule-row .en{font-family:var(--mono);font-size:clamp(.62rem,1vw,.85rem);color:var(--purple-accent);opacity:.8;direction:ltr;}
+
+/* === RULE OPENER === */
+.rule-name{font-family:var(--display);font-weight:400;font-size:clamp(3rem,8vw,6.5rem);line-height:1.05;color:var(--text);}
+.rule-en{font-family:var(--mono);font-size:clamp(.9rem,1.6vw,1.3rem);color:var(--purple-accent);letter-spacing:.04em;direction:ltr;}
+.rule-essence{font-size:clamp(1.1rem,1.9vw,1.55rem);line-height:1.6;color:var(--text-muted);max-width:24ch;}
+
+/* === QUESTIONS === */
+.q-list{display:flex;flex-direction:column;gap:1rem;max-width:30ch;}
+.q-list p{font-family:var(--display);font-size:clamp(1.2rem,2.3vw,1.9rem);line-height:1.35;color:var(--text);}
+
+/* === DIALOGUE === */
+.turns{display:flex;flex-direction:column;gap:clamp(.5rem,1.3vh,1rem);width:100%;max-width:min(92vw,820px);margin-top:.5rem;}
+.turn{display:grid;grid-template-columns:auto 1fr;gap:1rem;align-items:center;background:#fff;border:2.5px dashed #d8d2e8;border-radius:16px;padding:clamp(.7rem,1.5vw,1.1rem) clamp(1rem,2vw,1.6rem);text-align:start;}
+.turn .rn{font-family:var(--display);font-size:clamp(1.2rem,2.2vw,1.8rem);color:var(--purple-accent);}
+.turn .say{font-size:clamp(.92rem,1.5vw,1.2rem);line-height:1.5;color:var(--text);}
+
+/* === DECORATIVE === */
+.wavy-bg{position:absolute;inset:0;pointer-events:none;z-index:0;width:100%;height:100%;}
+.deco-q{position:absolute;opacity:.12;z-index:0;font-family:var(--display);}
+
+/* === NAV / PROGRESS === */
+.progress-track{position:fixed;top:0;left:0;right:0;height:5px;background:rgba(124,92,252,.12);z-index:100;}
+.progress-fill{height:100%;background:var(--purple-accent);width:0;transition:width .4s cubic-bezier(.16,1,.3,1);}
+.nav{position:fixed;bottom:1.8rem;right:2.4rem;display:flex;align-items:center;gap:.8rem;z-index:100;}
+[dir="rtl"] .nav{right:auto;left:2.4rem;direction:ltr;}
+.nav-btn{width:44px;height:44px;border-radius:50%;border:2.5px dashed var(--purple-accent);background:#fff;color:var(--purple-accent);font-size:1.2rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;}
+.nav-btn:hover:not(:disabled){background:var(--purple-accent);color:#fff;}
+.nav-btn:disabled{opacity:.3;cursor:default;}
+.nav-counter{font-family:var(--mono);font-size:.85rem;color:var(--text-muted);min-width:54px;text-align:center;}
+@media (max-width:768px){.nav{bottom:1rem;right:1.5rem;}[dir="rtl"] .nav{right:auto;left:1.5rem;}}
+</style>
+</head>
+<body>
+<div class="progress-track"><div class="progress-fill" id="progress"></div></div>
+
+<div class="deck" id="deck">
+
+    <!-- 0 — TITLE (pink) -->
+    <div class="slide active" data-slide="0" style="background:var(--pink-bg);">
+        <svg class="wavy-bg" viewBox="0 0 1440 900" preserveAspectRatio="none" style="opacity:.12;"><path d="M0,840 Q360,740 720,840 T1440,790 L1440,900 L0,900 Z" fill="#F7A8C4"/></svg>
+        <div class="stack">
+            <span class="kicker reveal">FAP Made Simple · פרק 5</span>
+            <h1 class="big-title reveal">חמשת כללי ה־<span class="hl-pink">FAP</span></h1>
+            <p class="medium-title reveal" style="font-size:clamp(1.3rem,2.6vw,2rem);color:var(--text-muted);">עיצוב התהליך הטיפולי</p>
+            <p class="body-text reveal" style="max-width:30ch;">"זה נראה כאילו זה עליהם — אבל זה עלייך. ועליי. להתחבר. <span class="hl-green">כאן ועכשיו</span>." — Susan Scott</p>
+        </div>
+    </div>
+
+    <!-- 1 — OPENING STATEMENT (cream) -->
+    <div class="slide" data-slide="1" style="background:var(--cream);">
+        <div class="stack">
+            <span class="tag reveal">פתיח</span>
+            <h2 class="big-title reveal">כשהבעיה מגיעה לחדר</h2>
+            <p class="body-text reveal">המאבק הבינאישי של המטופל לא רק מסופר — הוא מתרחש <span class="hl-pink">בינך לבינו</span>, ממש כאן בחדר.</p>
+        </div>
+    </div>
+
+    <!-- 2 — RESPONSIBILITY / OPPORTUNITY (gray) -->
+    <div class="slide" data-slide="2" style="background:var(--gray-bg);">
+        <div class="stack">
+            <h2 class="medium-title reveal">שתי דלתות נפתחות יחד</h2>
+            <div class="two-col reveal">
+                <div class="col-card red"><h3>האחריות</h3><p>לא לשחזר את הכאב הישן — שהפגיעוּת מסוכנת, שעדיף להישאר מרוחק.</p></div>
+                <div class="col-card green"><h3>ההזדמנות</h3><p>ליצור כאן ועכשיו חוויה רגשית חדשה ומתקנת של קרבה ובטיחות.</p></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3 — WHAT IS CRB (blue) -->
+    <div class="slide" data-slide="3" style="background:var(--blue-bg);">
+        <div class="stack">
+            <h2 class="medium-title reveal">מה זה <span class="hl-green">CRB</span>?</h2>
+            <div class="stats-row reveal">
+                <div class="stat-box"><div class="num">CRB1</div><div class="label">התנהגות בעייתית</div><div class="desc">הבעיה שמופיעה בחדר</div></div>
+                <div class="stat-box"><div class="num">CRB2</div><div class="label">שיפור וצמיחה</div><div class="desc">מה שרוצים להגביר</div></div>
+                <div class="stat-box"><div class="num">CRB3</div><div class="label">הכללה</div><div class="desc">העברה אל החיים</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4 — MECHANISM (yellow) -->
+    <div class="slide" data-slide="4" style="background:var(--yellow-bg);">
+        <div class="stack">
+            <span class="tag reveal">מנגנון השינוי</span>
+            <h2 class="big-title reveal"><span class="hl-red">פחות</span> CRB1 · <span class="hl-green">יותר</span> CRB2</h2>
+            <div class="lesson-rtl reveal"><p>וכל זה קורה דרך הקשר הטיפולי עצמו. הכללים הם כלי למידה — לא מרשם נוקשה.</p></div>
+        </div>
+    </div>
+
+    <!-- 5 — FIVE RULES OVERVIEW (green) -->
+    <div class="slide" data-slide="5" style="background:var(--green-bg);">
+        <div class="stack">
+            <h2 class="medium-title reveal">חמשת הכללים</h2>
+            <div class="rules-list">
+                <div class="rule-row reveal"><span class="rn">1</span><span><span class="nm">שים לב</span> · <span class="es">מודעות ואמפתיה</span></span><span class="en">Notice</span></div>
+                <div class="rule-row reveal"><span class="rn">2</span><span><span class="nm">עורר</span> · <span class="es">עידוד אסטרטגי ונועז</span></span><span class="en">Evoke</span></div>
+                <div class="rule-row reveal"><span class="rn">3</span><span><span class="nm">חזק</span> · <span class="es">חיזוק אותנטי</span></span><span class="en">Reinforce</span></div>
+                <div class="rule-row reveal"><span class="rn">4</span><span><span class="nm">שים לב להשפעתך</span> · <span class="es">מעקב לאורך זמן</span></span><span class="en">Notice Effect</span></div>
+                <div class="rule-row reveal"><span class="rn">5</span><span><span class="nm">תמוך בהכללה</span> · <span class="es">העברה לחיים</span></span><span class="en">Generalize</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6 — RULE 1 OPENER (cream) -->
+    <div class="slide" data-slide="6" style="background:var(--cream);">
+        <div class="stack">
+            <span class="tag reveal">כלל 1</span>
+            <h2 class="rule-name reveal">שים לב</h2>
+            <span class="rule-en reveal">Notice CRB</span>
+            <p class="rule-essence reveal"><span class="hl-pink">מודעות ואמפתיה</span> לרגע הנוכחי — לראות מה תקוע ומה צומח.</p>
+        </div>
+    </div>
+
+    <!-- 7 — RULE 1 IN PRACTICE (blue) -->
+    <div class="slide" data-slide="7" style="background:var(--blue-bg);">
+        <svg class="deco-q" style="top:8%;left:7%;width:110px;" viewBox="0 0 100 120"><text x="8" y="100" font-size="120" fill="#2D2A26">?</text></svg>
+        <div class="stack">
+            <span class="kicker reveal">כלל 1 · בפועל</span>
+            <div class="dashed-card reveal"><p>מטופלת מסכימה מהר מדי על מועד פגישה — אף שהיא מתקשה לבטא צרכים. <span class="hl-green">זה CRB1, ממש עכשיו.</span></p></div>
+            <p class="rule-essence reveal" style="font-style:normal;">לשאול את עצמך: מה הדפוס שביניכם — ואיזה חלק שלי תורם לו?</p>
+        </div>
+    </div>
+
+    <!-- 8 — RULE 2 OPENER (green) -->
+    <div class="slide" data-slide="8" style="background:var(--green-bg);">
+        <div class="stack">
+            <span class="tag reveal">כלל 2</span>
+            <h2 class="rule-name reveal">עורר</h2>
+            <span class="rule-en reveal">Evoke CRB</span>
+            <p class="rule-essence reveal">לא רק לשים לב — <span class="hl-pink">ליצור את ההקשר</span> שבו ה־CRB מופיע. באומץ, ובכנות.</p>
+        </div>
+    </div>
+
+    <!-- 9 — RULE 2 IN PRACTICE (cream) -->
+    <div class="slide" data-slide="9" style="background:var(--cream);">
+        <div class="stack">
+            <span class="kicker reveal">כלל 2 · בפועל</span>
+            <div class="dashed-card reveal"><p>מתקשה לבטא צרכים? הזמן אותה לפתוח כל פגישה ב<span class="hl-pink">הצהרת צרכים</span> ברורה.</p></div>
+            <div class="lesson-rtl reveal"><p>הזהירות: שיהיה אמיתי, לא מניפולטיבי — ולתמוך לפחות כמו שמאתגרים.</p></div>
+        </div>
+    </div>
+
+    <!-- 10 — RULE 3 OPENER (pink) -->
+    <div class="slide" data-slide="10" style="background:var(--pink-bg);">
+        <svg class="wavy-bg" viewBox="0 0 1440 900" preserveAspectRatio="none" style="opacity:.1;"><path d="M0,820 Q480,900 720,820 T1440,840 L1440,900 L0,900 Z" fill="#7C5CFC"/></svg>
+        <div class="stack">
+            <span class="tag reveal">כלל 3 · הלב של FAP</span>
+            <h2 class="rule-name reveal">חזק</h2>
+            <span class="rule-en reveal">Reinforce CRB2</span>
+            <p class="rule-essence reveal">האופן שבו אתה <span class="hl-green">מגיב ברגע</span> — הוא שמעצב אם השינוי יתמיד.</p>
+        </div>
+    </div>
+
+    <!-- 11 — RULE 3 IN PRACTICE (yellow) -->
+    <div class="slide" data-slide="11" style="background:var(--yellow-bg);">
+        <div class="stack">
+            <span class="kicker reveal">כלל 3 · חמש הנחיות</span>
+            <div class="two-col reveal" style="max-width:min(92vw,900px);">
+                <div class="col-card green"><h3>טבעי אך אינטנסיבי</h3><p>הגבר את תגובתך הטבעית מעבר לנורמות.</p></div>
+                <div class="col-card green"><h3>בטיחות וקבלה</h3><p>הבע בפירוש שהמטופל בטוח ומקובל.</p></div>
+                <div class="col-card green"><h3>דבר בביטחון</h3><p>קול ברור, לא עמימות ברגעי פגיעוּת.</p></div>
+                <div class="col-card green"><h3>היה אמיתי</h3><p>בני אדם מזהים זיוף — הבא את קולך.</p></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 12 — RULE 4 OPENER (blue) -->
+    <div class="slide" data-slide="12" style="background:var(--blue-bg);">
+        <div class="stack">
+            <span class="tag reveal">כלל 4</span>
+            <h2 class="rule-name reveal">שים לב להשפעתך</h2>
+            <span class="rule-en reveal">Notice Your Effect</span>
+            <p class="rule-essence reveal">חיזוק פועל <span class="hl-pink">לאורך זמן</span> — האם CRB2 עולה, ו־CRB1 יורד?</p>
+        </div>
+    </div>
+
+    <!-- 13 — RULE 4 IN PRACTICE (cream) -->
+    <div class="slide" data-slide="13" style="background:var(--cream);">
+        <svg class="deco-q" style="bottom:10%;right:8%;width:120px;" viewBox="0 0 100 120"><text x="8" y="100" font-size="120" fill="#2D2A26">?</text></svg>
+        <div class="stack">
+            <span class="kicker reveal">כלל 4 · בפועל</span>
+            <div class="dashed-card reveal"><p>בסוף כל פגישה, שאל פשוט:<br><span class="hl-green">"כיצד הייתי בתגובה אליך היום?"</span></p></div>
+            <p class="rule-essence reveal" style="font-style:normal;">טעויות בלתי נמנעות — מה שמשנה הוא המגמה הכוללת.</p>
+        </div>
+    </div>
+
+    <!-- 14 — RULE 5 OPENER (green) -->
+    <div class="slide" data-slide="14" style="background:var(--green-bg);">
+        <div class="stack">
+            <span class="tag reveal">כלל 5</span>
+            <h2 class="rule-name reveal">תמוך בהכללה</h2>
+            <span class="rule-en reveal">Support Generalization</span>
+            <p class="rule-essence reveal">המטרה: שינוי <span class="hl-pink">מחוץ לחדר</span> — יציב מספיק כדי שהטיפול יוכל להסתיים.</p>
+        </div>
+    </div>
+
+    <!-- 15 — RULE 5 IN PRACTICE (gray) -->
+    <div class="slide" data-slide="15" style="background:var(--gray-bg);">
+        <div class="stack">
+            <span class="kicker reveal">כלל 5 · שתי דרכים</span>
+            <div class="two-col reveal">
+                <div class="col-card"><h3>מבפנים־לחוץ</h3><p>להקביל את מה שקרה בחדר למערכת יחסים בחוץ.</p></div>
+                <div class="col-card"><h3>שיעורי בית</h3><p>לתרגל את אותו CRB2 עם אנשים חשובים בחיים.</p></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 16 — REFLECTION QUESTION (cream) -->
+    <div class="slide" data-slide="16" style="background:var(--cream);">
+        <svg class="deco-q" style="top:7%;right:8%;width:140px;" viewBox="0 0 100 120"><text x="8" y="100" font-size="120" fill="#7C5CFC">?</text></svg>
+        <svg class="deco-q" style="bottom:9%;left:7%;width:100px;" viewBox="0 0 100 120"><text x="8" y="100" font-size="120" fill="#E8847A">?</text></svg>
+        <div class="stack">
+            <span class="kicker reveal">רגע של רפלקציה</span>
+            <div class="q-list">
+                <p class="reveal">מה אני <span class="hl-pink">מעריך</span> במטופל שלי — והאם הוא יודע זאת?</p>
+                <p class="reveal">היכן אני <span class="hl-green">נמנע</span>, כי ה־CRB אי־נוח לי?</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 17 — DIALOGUE (yellow) -->
+    <div class="slide" data-slide="17" style="background:var(--yellow-bg);">
+        <div class="stack">
+            <h2 class="medium-title reveal">הכללים בפעולה</h2>
+            <div class="turns">
+                <div class="turn reveal"><span class="rn">1</span><span class="say">המטפל מזהה את ההתגוננות — מתרחשת עכשיו בחדר.</span></div>
+                <div class="turn reveal"><span class="rn">2</span><span class="say">"מה יכולת לנסות <span class="hl-pink">ממש עכשיו</span> שייראה פחות הגנתי?"</span></div>
+                <div class="turn reveal"><span class="rn">3</span><span class="say">"זה <span class="hl-green">מדהים</span> כמה שונה זה נשמע" — חיזוק הרגע.</span></div>
+                <div class="turn reveal"><span class="rn">5</span><span class="say" style="direction:ltr;">"What if you could do this with her?"</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 18 — SUMMARY (blue) -->
+    <div class="slide" data-slide="18" style="background:var(--blue-bg);">
+        <div class="stack">
+            <h2 class="medium-title reveal">FAP — לא סגנון, אלא <span class="hl-green">תהליך</span></h2>
+            <div class="rules-list" style="max-width:min(92vw,760px);">
+                <div class="rule-row reveal"><span class="rn">1</span><span class="nm">כלל 1 הוא הבסיס</span><span class="en"></span></div>
+                <div class="rule-row reveal"><span class="rn">3</span><span class="nm">כלל 3 הוא הלב</span><span class="en"></span></div>
+                <div class="rule-row reveal"><span class="rn">★</span><span class="nm">האמינות שלך היא הכלי</span><span class="en"></span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 19 — CLOSING (cream) -->
+    <div class="slide" data-slide="19" style="background:var(--cream);">
+        <svg class="wavy-bg" viewBox="0 0 1440 900" preserveAspectRatio="none" style="opacity:.1;"><path d="M0,830 Q360,760 720,830 T1440,800 L1440,900 L0,900 Z" fill="#7BC47F"/></svg>
+        <div class="stack">
+            <span class="kicker reveal">לסיום</span>
+            <h2 class="big-title reveal">לראות · לעורר · <span class="hl-pink">לחזק</span></h2>
+            <p class="body-text reveal" style="max-width:32ch;">דרך אחרת להיות בקשר — מתחילה ברגע אחד של הבנה חומלת. כאן. ועכשיו.</p>
+        </div>
+    </div>
+
+</div>
+
+<div class="nav">
+    <button class="nav-btn" id="prev">&#8594;</button>
+    <span class="nav-counter" id="counter">1 / 20</span>
+    <button class="nav-btn" id="next">&#8592;</button>
+</div>
+
+<script>
+/* === SLIDE NAVIGATION (direction-aware, RTL) === */
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+const counter = document.getElementById('counter');
+const progress = document.getElementById('progress');
+const prevBtn = document.getElementById('prev');
+const nextBtn = document.getElementById('next');
+const isRTL = document.documentElement.dir === 'rtl';
+
+function go(dir){
+    const next = current + dir;
+    if(next < 0 || next >= total) return;
+    slides[current].classList.remove('active');
+    current = next;
+    slides[current].classList.add('active');
+    counter.textContent = `${current + 1} / ${total}`;
+    progress.style.width = `${((current + 1) / total) * 100}%`;
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === total - 1;
+}
+
+document.addEventListener('keydown', (e) => {
+    const nextKey = isRTL ? 'ArrowLeft' : 'ArrowRight';
+    const backKey = isRTL ? 'ArrowRight' : 'ArrowLeft';
+    if(e.key === nextKey || e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); go(1); }
+    if(e.key === backKey || e.key === 'Backspace'){ e.preventDefault(); go(-1); }
+});
+
+let touchStartX = 0;
+document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, {passive:true});
+document.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if(Math.abs(dx) > 60){ if(isRTL) go(dx > 0 ? 1 : -1); else go(dx < 0 ? 1 : -1); }
+}, {passive:true});
+
+prevBtn.addEventListener('click', () => go(-1));
+nextBtn.addEventListener('click', () => go(1));
+
+progress.style.width = `${(1 / total) * 100}%`;
+counter.textContent = `1 / ${total}`;
+prevBtn.disabled = true;
+</script>
+</body>
+</html>
