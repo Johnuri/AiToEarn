@@ -5,9 +5,9 @@ An animated slide presentation about **AiToEarn**, built with the
 
 ## View it
 
-It's a single self-contained page that loads Impresi from a CDN and reuses the
-images in the parent `presentation/` folder, so it must be served over HTTP
-(opening the file directly will block the relative image paths in some browsers).
+It's a self-contained page that loads Impresi from a CDN and uses the images
+bundled in the local `img/` folder. Serve it over HTTP (some browsers block the
+CDN script and local images when opening the file directly):
 
 ```bash
 # from the repository root
