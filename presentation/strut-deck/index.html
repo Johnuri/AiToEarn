@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>Functional Analytic Psychotherapy — impress.js / Strut</title>
+  <style>
+    :root {
+      --bg:#0f1115; --text:#c0caf5; --muted:#a9b1d6; --blue:#7aa2f7;
+      --green:#9ece6a; --red:#f7768e; --gold:#e0af68; --white:#fff;
+    }
+    html, body { margin:0; padding:0; height:100%;
+      background:var(--bg); color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      -webkit-font-smoothing:antialiased;
+    }
+    /* impress.js root */
+    #impress { width:100%; }
+    .step {
+      width:900px; padding:60px;
+      box-sizing:border-box;
+      opacity:0.25; transition:opacity 0.6s ease;
+    }
+    .step.active { opacity:1; }
+    h1 { font-size:54px; line-height:1.1; margin:0 0 24px; color:var(--blue); }
+    h2 { font-size:42px; margin:0 0 28px; color:var(--white); }
+    p  { font-size:26px; line-height:1.5; margin:0 0 18px; color:var(--text); }
+    .sub   { font-size:30px; color:var(--text); }
+    .tag   { font-size:24px; color:var(--green); }
+    .muted { color:var(--muted); font-size:22px; }
+    .crb1  { color:var(--red); }
+    .crb2  { color:var(--green); }
+    .crb3  { color:var(--gold); }
+    .accent-green { color:var(--green); }
+    .accent-blue  { color:var(--blue); }
+    ul { list-style:none; padding:0; margin:0; }
+    li { font-size:26px; line-height:1.6; margin:0 0 14px; }
+    .center { text-align:center; }
+    /* Fallback for unsupported browsers */
+    .fallback-message {
+      display:none; position:fixed; bottom:0; left:0; right:0;
+      background:#161821; padding:14px; text-align:center; color:var(--muted);
+    }
+    .impress-not-supported .fallback-message { display:block; }
+    .impress-not-supported .step { opacity:1; position:relative; margin:40px auto; }
+    .hint { position:fixed; bottom:16px; right:20px; color:rgba(192,202,245,0.5);
+      font-size:13px; z-index:10; }
+  </style>
+</head>
+<body class="impress-not-supported">
+
+  <div class="fallback-message">
+    <p>Your browser <b>doesn't support impress.js</b>, so this shows as a simple scroll.
+    Try the latest Chrome, Safari or Firefox.</p>
+  </div>
+
+  <!-- impress.js presentation: a Prezi-style zooming/rotating canvas -->
+  <div id="impress" data-transition-duration="900">
+
+    <!-- 1: Title -->
+    <div class="step center" data-x="0" data-y="0" data-scale="3">
+      <h1>Functional Analytic Psychotherapy</h1>
+      <p class="sub">Using the therapeutic relationship itself to create change</p>
+      <p class="tag">Awareness · Courage · Love</p>
+    </div>
+
+    <!-- 2: What is FAP -->
+    <div class="step" data-x="2600" data-y="-700" data-rotate="5">
+      <h2>What is FAP?</h2>
+      <p>A behavioral psychotherapy developed by <b>Robert Kohlenberg</b> and
+         <b>Mavis Tsai</b> (1991).</p>
+      <p>Its core premise: meaningful change happens through a genuine, intense,
+         and curative therapeutic relationship.</p>
+    </div>
+
+    <!-- 3: CRBs -->
+    <div class="step" data-x="5200" data-y="600" data-rotate="-3">
+      <h2>Clinically Relevant Behaviors</h2>
+      <p class="muted">The client's problems show up live, in the room, with the therapist.</p>
+      <ul>
+        <li class="crb1"><b>CRB1</b> — problem behaviors as they occur in session</li>
+        <li class="crb2"><b>CRB2</b> — improvements that occur in session</li>
+        <li class="crb3"><b>CRB3</b> — the client's own talk about their behavior</li>
+      </ul>
+    </div>
+
+    <!-- 4: The Five Rules (zoom in tight) -->
+    <div class="step" data-x="7600" data-y="-900" data-scale="1.5">
+      <h2>The Five Rules</h2>
+      <ul>
+        <li>1 · Be aware — watch for CRBs</li>
+        <li>2 · Be courageous — evoke CRBs</li>
+        <li>3 · Be therapeutically loving — naturally reinforce CRB2s</li>
+        <li>4 · Be aware of your impact on the client</li>
+        <li>5 · Interpret functionally & generalize to daily life</li>
+      </ul>
+    </div>
+
+    <!-- 5: Natural reinforcement -->
+    <div class="step" data-x="10600" data-y="500" data-rotate="4">
+      <h2 class="accent-green">Natural reinforcement</h2>
+      <p>Change is driven by genuine, contingent responding to in-session
+         improvements — <b>not</b> arbitrary praise.</p>
+      <p>The therapist reacts as caring people would in the client's real life.</p>
+    </div>
+
+    <!-- 6: ACL model (rotate) -->
+    <div class="step" data-x="13000" data-y="-800" data-rotate="-6" data-scale="1.2">
+      <h2 class="accent-blue">The ACL model</h2>
+      <ul>
+        <li><b>Awareness</b> — notice what matters, in yourself and the other</li>
+        <li><b>Courage</b> — risk emotional exposure and vulnerability</li>
+        <li><b>Love</b> — respond with genuine care and connection</li>
+      </ul>
+    </div>
+
+    <!-- 7: Why it matters -->
+    <div class="step" data-x="15600" data-y="500" data-rotate="3">
+      <h2>Why it matters</h2>
+      <p>By working with behavior as it unfolds in the relationship, FAP builds
+         new interpersonal repertoires that the client can carry into life
+         outside the therapy room.</p>
+    </div>
+
+    <!-- 8: Closing (overview-style big zoom) -->
+    <div class="step center" data-x="8000" data-y="-100" data-scale="6">
+      <h1>The relationship is the treatment.</h1>
+      <p class="tag">Kohlenberg & Tsai · Functional Analytic Psychotherapy</p>
+    </div>
+
+  </div>
+
+  <div class="hint">→ / Space to advance · ← back</div>
+
+  <!-- impress.js from CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/impress.js/2.0.0/js/impress.min.js"></script>
+  <script>impress().init();</script>
+</body>
+</html>
