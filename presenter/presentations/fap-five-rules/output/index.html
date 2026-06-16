@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>עיצוב התהליך · Shape Process with the Five Rules of FAP</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/white.css" id="theme">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700;900&family=Heebo:wght@300;400;500;700&family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --cream:#f4efe6;
+      --cream-2:#efe7d8;
+      --ink:#2b2422;
+      --muted:#6f6258;
+      --maroon:#8c2b22;
+      --maroon-2:#a8342a;
+      --gold:#c9b48f;
+      --card:#ece2cf;
+    }
+    .reveal{ font-family:'Heebo',sans-serif; color:var(--ink); font-size:30px; }
+    .reveal .slides{ text-align:right; }
+    .reveal .slides section{ height:100%; }
+    .reveal-viewport{ background:var(--cream); }
+    .reveal h1,.reveal h2,.reveal h3{ font-family:'Frank Ruhl Libre',serif; color:var(--ink); text-transform:none; letter-spacing:0; font-weight:900; line-height:1.1; }
+    .reveal em,.reveal .en{ font-family:'EB Garamond',serif; font-style:italic; color:var(--muted); }
+    .reveal strong{ color:var(--maroon); }
+
+    /* layout helpers */
+    .slide-pad{ padding:8px 26px; box-sizing:border-box; }
+    .eyebrow{ font-family:'Heebo',sans-serif; font-size:0.5em; letter-spacing:.18em; color:var(--maroon); text-transform:uppercase; margin-bottom:.4em; font-weight:500; }
+    .rule-en{ font-family:'EB Garamond',serif; font-style:italic; font-size:0.62em; color:var(--muted); margin-bottom:.05em; }
+    .topbar{ position:absolute; top:0; right:0; left:0; height:8px; background:var(--maroon); }
+    .footer{ position:absolute; bottom:14px; right:26px; left:26px; display:flex; justify-content:space-between;
+             font-family:'Heebo'; font-size:.42em; color:var(--muted); letter-spacing:.06em; }
+    .footer .en{ font-style:italic; }
+
+    .lead{ color:var(--muted); font-size:.82em; line-height:1.5; max-width:30ch; }
+    .lead-wide{ color:var(--ink); font-size:.7em; line-height:1.55; }
+
+    /* cards row */
+    .cards{ display:flex; gap:18px; margin-top:18px; }
+    .card{ flex:1; background:var(--card); border:1px solid var(--gold); border-radius:8px; padding:18px 20px; }
+    .card h3{ color:var(--maroon); font-size:1.0em; margin:0 0 .15em; }
+    .card .sub{ font-weight:700; font-size:.62em; margin-bottom:.5em; color:var(--ink); font-family:'Frank Ruhl Libre',serif; }
+    .card p{ font-size:.5em; color:var(--muted); line-height:1.45; margin:0; }
+    .card.crb h3{ font-size:1.6em; }
+
+    .goal{ margin-top:18px; background:var(--cream-2); border-right:4px solid var(--maroon); border-radius:6px; padding:12px 18px; }
+    .goal .tag{ font-size:.42em; letter-spacing:.12em; color:var(--maroon); text-transform:uppercase; display:block; margin-bottom:.2em; }
+    .goal p{ margin:0; font-size:.55em; color:var(--ink); }
+
+    /* big number rule cover */
+    .rule-cover{ position:relative; height:100%; display:flex; flex-direction:column; justify-content:center; padding:0 26px; }
+    .bignum{ position:absolute; left:40px; top:50%; transform:translateY(-50%);
+             font-family:'Frank Ruhl Libre',serif; font-weight:900; font-size:7.2em; color:var(--maroon); line-height:.8; opacity:.92; }
+    .bignum small{ font-size:.22em; color:var(--muted); display:block; text-align:center; margin-top:.1em; }
+    .pips{ display:flex; gap:8px; margin-top:22px; font-family:'EB Garamond',serif; font-style:italic; font-size:.45em; color:var(--muted); }
+    .pips span{ padding:3px 10px; border:1px solid var(--gold); border-radius:20px; }
+    .pips span.on{ background:var(--maroon); color:#fff; border-color:var(--maroon); }
+
+    /* detail two-column */
+    .two{ display:flex; gap:26px; margin-top:14px; }
+    .two .col{ flex:1; }
+    .colhead{ font-family:'Frank Ruhl Libre',serif; font-weight:700; color:var(--maroon); font-size:.7em; margin-bottom:.4em; }
+    .reveal ul{ font-size:.56em; line-height:1.5; color:var(--ink); }
+    .reveal ul.q li{ color:var(--muted); }
+    .reveal li{ margin:.28em 0; }
+
+    /* table */
+    table.rules{ width:100%; border-collapse:collapse; margin-top:10px; font-size:.6em; }
+    table.rules td,table.rules th{ padding:11px 14px; border-bottom:1px solid var(--gold); text-align:right; }
+    table.rules .num{ color:var(--maroon); font-family:'Frank Ruhl Libre',serif; font-weight:900; font-size:1.3em; width:1em; }
+    table.rules .he{ font-family:'Frank Ruhl Libre',serif; font-weight:700; }
+    table.rules .en{ font-style:italic; color:var(--muted); }
+    table.rules .desc{ color:var(--muted); }
+
+    /* case rows */
+    .case-row{ display:flex; align-items:center; gap:16px; background:var(--card); border:1px solid var(--gold);
+               border-radius:7px; padding:10px 16px; margin:9px 0; font-size:.56em; }
+    .case-row .k{ display:flex; flex-direction:column; align-items:center; min-width:60px; }
+    .case-row .k b{ color:var(--maroon); font-family:'Frank Ruhl Libre',serif; font-size:1.5em; line-height:1; }
+    .case-row .k span{ font-style:italic; font-family:'EB Garamond',serif; font-size:.7em; color:var(--muted); }
+    .case-row .t{ line-height:1.45; }
+    .case-row .t .hl{ color:var(--maroon); font-weight:500; }
+    .case-row .t .en{ font-style:italic; }
+
+    /* quote slides */
+    .quote{ height:100%; display:flex; flex-direction:column; justify-content:center; padding:0 60px; }
+    .quote p{ font-family:'EB Garamond',serif; font-style:italic; font-size:1.25em; line-height:1.5; color:var(--ink); }
+    .quote .sees{ color:var(--maroon); }
+    .quote cite{ display:block; margin-top:.8em; font-style:normal; font-family:'Heebo'; font-size:.5em; color:var(--maroon); letter-spacing:.1em; }
+    .dots{ position:absolute; top:0; bottom:0; right:18px; display:flex; flex-direction:column; justify-content:center; gap:11px; }
+    .dots i{ width:6px; height:6px; border-radius:50%; border:1px solid var(--gold); display:block; }
+    .dots i.on{ background:var(--maroon); border-color:var(--maroon); }
+
+    .title-wrap{ height:100%; display:flex; flex-direction:column; justify-content:center; align-items:flex-end; padding:0 40px; }
+    .title-wrap h1{ font-size:2.6em; }
+    .title-wrap .sub{ font-family:'EB Garamond',serif; font-style:italic; font-size:.95em; color:var(--muted); margin-top:.1em; }
+    .title-wrap .tq{ margin-top:26px; max-width:42ch; font-family:'EB Garamond',serif; font-style:italic; font-size:.6em; color:var(--muted); line-height:1.5; }
+
+    .reveal .progress{ color:var(--maroon); }
+    .reveal .controls{ color:var(--maroon); }
+  </style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+  <!-- 1 · TITLE -->
+  <section data-background-color="#f4efe6">
+    <div class="topbar"></div>
+    <div class="title-wrap">
+      <div class="eyebrow">FAP Made Simple · עיצוב התהליך</div>
+      <h1>עיצוב התהליך</h1>
+      <div class="sub">Shape Process with the Five Rules of FAP</div>
+      <div class="tq">"It's easy to think it's about them, about him or her, but it's about you. And me. Connecting. Right now, in this conversation. Not that one. This one." — Susan Scott</div>
+    </div>
+    <div class="footer"><span class="en">FAP Made Simple</span><span>פתיחה</span></div>
+  </section>
+
+  <!-- 2 · PROBLEM ENTERS THE ROOM -->
+  <section data-background-color="#f4efe6">
+    <div class="topbar"></div>
+    <div class="slide-pad">
+      <div class="eyebrow">00 · מבוא</div>
+      <h2>כשהבעיה מגיעה לחדר</h2>
+      <p class="lead-wide" style="max-width:48ch; margin-top:10px;">
+        הקושי שהקליינט חווה בעולם שמחוץ לטיפול — בקרבה, בביטוי צורך, בהתמודדות עם דחייה —
+        אינו נשאר בחוץ. אותה דינמיקה בדיוק חוזרת ומופיעה <strong>בתוך החדר</strong>, בקשר עם המטפל.
+        זה בדיוק הרגע שבו אפשר לעבוד.
+      </p>
+      <div class="cards">
+        <div class="card"><div class="sub">חוויה רגשית מתקנת</div>
+          <p>הקשר הטיפולי עצמו הופך לזירת אימון חיה: כאן הבעיה מתרחשת, וכאן אפשר לתרגל תגובה חדשה — בזמן אמת.</p></div>
+        <div class="card"><div class="sub">לא לשחזר את הבעיה</div>
+          <p>תפקיד המטפל אינו לשחזר את הדפוס הישן אלא להגיב אליו אחרת — כך שהמפגש עצמו יהפוך למתקן.</p></div>
+      </div>
+    </div>
+    <div class="footer"><span class="en">FAP Made Simple</span><span>מבוא</span></div>
+  </section>
+
+  <!-- 3 · WHAT IS A CRB -->
+  <section data-background-color="#f4efe6">
+    <div class="topbar"></div>
+    <div class="slide-pad">
+      <div class="eyebrow">00 · מנגנון השינוי · Clinically Relevant Behaviors</div>
+      <h2>מהו <span dir="ltr">CRB</span>?</h2>
+      <div class="cards" style="margin-top:14px;">
+        <div class="card crb"><h3 dir="ltr">CRB1</h3><div class="sub">התנהגות בעייתית</div>
+          <p>הבעיה הקלינית שמופיעה בחדר — תגובות ודפוסים ששורשם בעולם שמחוץ לטיפול, שכעת מתרחשים מולך.</p></div>
+        <div class="card crb"><h3 dir="ltr">CRB2</h3><div class="sub">שיפור וצמיחה</div>
+          <p>התנהגויות אפקטיביות יותר, שליטה גוברת על ה‑CRB1 — מה שאנחנו רוצים להגביר.</p></div>
+        <div class="card crb"><h3 dir="ltr">CRB3</h3><div class="sub">תיאור והכללה</div>
+          <p>תיאור של המטופל את התנהגותו ומה מניע אותה, והעברה של הנלמד אל מחוץ לחדר.</p></div>
+      </div>
+      <div class="goal">
+        <span class="tag">המטרה</span>
+        <p>להפחית <span dir="ltr">CRB1</span> ולהגביר <span dir="ltr">CRB2</span> דרך הקשר הטיפולי עצמו. חמשת הכללים הם כלי למידה — לא מרשם נוקשה.</p>
+      </div>
+    </div>
+    <div class="footer"><span class="en">FAP Made Simple · פרק 5</span><span>מנגנון השינוי</span></div>
+  </section>
+
+  <!-- 4 · FIVE RULES AT A GLANCE -->
+  <section data-background-color="#f4efe6">
+    <div class="topbar"></div>
+    <div class="slide-pad">
+      <div class="eyebrow">סקירה</div>
+      <h2>חמשת הכללים במבט אחד</h2>
+      <table class="rules">
+        <tr><td class="num">1</td><td class="he">שים לב<br><span class="en">Notice CRB</span></td><td class="desc">מודעות ממוקדת לזיהוי ה‑CRBs בזמן אמת</td></tr>
+        <tr><td class="num">2</td><td class="he">עורר<br><span class="en">Evoke CRB</span></td><td class="desc">עיצוב מצבים שמזמינים את ה‑CRB להופיע</td></tr>
+        <tr><td class="num">3</td><td class="he">חזק<br><span class="en">Reinforce CRB2</span></td><td class="desc">חיזוק טבעי ואותנטי של התגובה הבריאה</td></tr>
+        <tr><td class="num">4</td><td class="he">שים לב להשפעתך<br><span class="en">Notice Your Effect</span></td><td class="desc">מעקב אחר ההשפעה בפועל של התנהגות המטפל</td></tr>
+        <tr><td class="num">5</td><td class="he">תמוך בהכללה<br><span class="en">Support Generalization</span></td><td class="desc">העברת הנלמד מהחדר אל החיים שבחוץ</td></tr>
+      </table>
+    </div>
+    <div class="footer"><span class="en">FAP Made Simple</span><span>סקירה</span></div>
+  </section>
+
+  <!-- 5 · ONGOING PROCESS -->
+  <section data-background-color="#f4efe6">
+    <div class="topbar"></div>
+    <div class="slide-pad">
+      <div class="eyebrow">מהות התהליך</div>
+      <h2>תהליך מתמשך, רגע אחר רגע</h2>
+      <p class="lead-wide" style="max-width:46ch; margin-top:10px;">
+        חמשת הכללים אינם רצף ליניארי של שלבים אלא מעגל חי: בכל רגע בחדר אתה
+        מבחין, מזמין, מחזק, בודק את השפעתך ומחבר אל החיים — ושוב מהתחלה. הם מתקיימים
+        <strong>בו‑זמנית</strong>, וזורמים זה לתוך זה.
+      </p>
+      <div class="pips" style="margin-top:22px;">
+        <span class="on">1 · שים לב</span><span>2 · עורר</span><span>3 · חזק</span><span>4 · השפעה</span><span>5 · הכללה</span>
+      </div>
+    </div>
+    <div class="footer"><span class="en">FAP Made Simple</span><span>מהות התהליך</span></div>
+  </section>
+
+  <!-- ============ RULE 1 ============ -->
+  <section>
+    <section data-background-color="#f4efe6">
+      <div class="topbar"></div>
+      <div class="rule-cover">
+        <div class="bignum">1<small>/5</small></div>
+        <div class="rule-en">Rule 1 · Notice CRB</div>
+        <h2 style="font-size:2.2em;">שים לב</h2>
+        <p class="lead" style="margin-top:10px;">מודעות ממוקדת לזיהוי ה‑CRBs — ההבחנה בין מה ששייך לעולם שבחוץ ובין מה שמתרחש כאן, ברגע הזה, בינך לבין הקליינט.</p>
+        <div class="pips"><span class="on">Notice</span><span>Evoke</span><span>Reinforce</span><span>Effect</span><span>Generalize</span></div>
+      </div>
+      <div class="footer"><span class="en">Rule 1 · Notice</span><span>שים לב</span></div>
+    </section>
+
+    <section data-background-color="#f4efe6">
+      <div class="topbar"></div>
+      <div class="slide-pad">
+        <div class="eyebrow">1 · שים לב · מהות הכלל</div>
+        <h2 style="font-size:1.5em;">לזהות את הרגע</h2>
+        <div class="two">
+          <div class="col">
+            <div class="colhead">רומזים לשדה</div>
+            <ul>
+              <li>הקליינט מתנתק, מסיט נושא או "מרצה" אותך — אלו לעיתים קרובות <strong>CRB1</strong> בזמן אמת.</li>
+              <li>רגע של פגיעות, כנות או בקשת צורך ישיר — אלו ניצני <strong>CRB2</strong>.</li>
+              <li>ה‑CRB לרוב שקט ומהיר; הוא נראה כמו "סתם" שיחה.</li>
+            </ul>
+          </div>
+          <div class="col">
+            <div class="colhead">שאלות להדרכה</div>
+            <ul class="q">
+              <li>מה קורה ביני לבין הקליינט ממש עכשיו?</li>
+              <li>האם הדפוס שתואר על החיים שבחוץ מופיע כאן?</li>
+              <li>איזו תגובה שלי תזמין יותר מאותו רגע?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span class="en">Rule 1 · Notice</span><span>מהות הכלל</span></div>
+    </section>
+  </section>
+
+  <!-- ============ RULE 2 ============ -->
+  <section>
+    <section data-background-color="#f4efe6">
+      <div class="topbar"></div>
+      <div class="rule-cover">
+        <div class="bignum">2<small>/5</small></div>
+        <div class="rule-en">Rule 2 · Evoke CRB</div>
+        <h2 style="font-size:2.2em;">עורר</h2>
+        <p class="lead" style="margin-top:10px;">לא לחכות לרגע — ליצור באופן אסטרטגי את ההקשר שבו ה‑CRBs מתעוררים. כדי לעבוד על משהו, צריך קודם שהוא יופיע בחדר.</p>
+        <div class="pips"><span>Notice</span><span class="on">Evoke</span><span>Reinforce</span><span>Effect</span><span>Generalize</span></div>
+      </div>
+      <div class="footer"><span class="en">Rule 2 · Evoke</span><span>עורר</span></div>
+    </section>
+
+    <section data-background-color="#f4efe6">
+      <div class="topbar"></div>
+      <div class="slide-pad">
+        <div class="eyebrow">2 · עורר · מהות הכלל</div>
+        <h2 style="font-size:1.5em;">להזמין את החדש</h2>
+        <div class="two">
+          <div class="col">
+            <div class="colhead">רומזים לשדה</div>
+            <ul>
+              <li>השתמש במבנה הטיפול עצמו — סיומים, הפסקות, גבולות — כהזדמנות מתעוררת.</li>
+              <li>שאל ישירות על הקשר ביניכם: "מה קורה כשאני אומר את זה?"</li>
+              <li>אל תזייף משבר; חשוף את ה‑CRB שכבר מבקש לצוף.</li>
+            </ul>
+          </div>
+          <div class="col">
+            <div class="colhead">שאלות להדרכה</div>
+            <ul class="q">
+              <li>איזה הקשר יזמין דווקא את ה‑CRB2 שאני מקווה לו?</li>
+              <li>האם אני נמנע מלעורר כי זה לא נוח לי?</li>
+              <li>איך אבקש מהקליינט לנסות תגובה חדשה כאן ועכשיו?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span class="en">Rule 2 · Evoke</span><span>מהות הכלל</span></div>
+    </section>
+  </section>
+
+  <!-- ============ RULE 3 ============ -->
+  <section>
+    <section data-background-color="#f4efe6">
+      <div class="topbar"></div>
+      <div class="rule-cover">
+        <div class="bignum">3<small>/5</small></div>
+        <div class="rule-en">Rule 3 · Reinforce CRB2</div>
+        <h2 style="font-size:2.2em;">חזק</h2>
+        <p class="lead" style="margin-top:10px;">לב ה‑FAP. לחזק באופן טבעי את ה‑CRB2 כך שיתחזק — דרך תגובה אנושית ואותנטית שלך, ברגע שבו זה קורה.</p>
+        <div class="pips"><span>Notice</span><span>Evoke</span><span class="on">Reinforce</span><span>Effect</span><span>Generalize</span></div>
+      </div>
+      <div class="footer"><span class="en">Rule 3 · Reinforce</span><span>חזק</span></div>
+    </section>
+
+    <section data-background-color="#f4efe6">
+      <div class="topbar"></div>
+      <div class="slide-pad">
+        <div class="eyebrow">3 · חזק · CRB2</div>
+        <h2 style="font-size:1.4em;">כיצד לחזק — חמש הנחיות</h2>
+        <div class="cards" style="margin-top:14px;">
+          <div class="card"><div class="sub">1 · היה אמיתי</div><p>תגובה אותנטית פועלת חזק יותר מכל שבח טכני. תן לרגע לגעת בך באמת.</p></div>
+          <div class="card"><div class="sub">2 · בזמן אמת</div><p>חזק את ה‑CRB2 ברגע שהוא מופיע, לא דקה אחרי. העיתוי הוא החיזוק.</p></div>
+          <div class="card"><div class="sub">3 · דבר על הקשר</div><p>תאר את ההשפעה עליך: "כשאתה אומר את זה, אני מרגיש קרוב יותר".</p></div>
+          <div class="card"><div class="sub">4 · התאם לקליינט</div><p>מה שמחזק אחד עלול להבהיל אחר. כייל את עוצמת התגובה אישית.</p></div>
+          <div class="card"><div class="sub">5 · אל תלמד, חיה</div><p>פחות "כל הכבוד" ויותר תגובה חיה שמגלמת קבלה אמיתית של מה שקרה.</p></div>
+        </div>
+      </div>
+      <div class="footer"><span class="en">Rule 3 · Reinforce</span><span>חמש הנחיות</span></div>
+    </section>
+
+    <section data-background-color="#f4efe6">
+      <div class="topbar"></div>
+      <div class="slide-pad">
+        <div class="eyebrow">3 · חזק · בפועל</div>
+        <h2 style="font-size:1.5em;">חיזוק בפועל</h2>
+        <div class="two">
+          <div class="col">
+            <div class="colhead">רומזים לשדה</div>
+            <ul>
+              <li>חיזוק טבעי ≠ מחמאה. זו תגובה אמיתית שמגדילה את הסיכוי שה‑CRB2 יחזור.</li>
+              <li>שתיקה מכבדת, רכות בקול או שינוי בקצב יכולים להיות חיזוק רב‑עוצמה.</li>
+              <li>היזהר מ‑High Fives ריקים — חיזוק מלאכותי נקרא ככזה ומחליש.</li>
+            </ul>
+          </div>
+          <div class="col">
+            <div class="colhead">שאלות להדרכה</div>
+            <ul class="q">
+              <li>האם התגובה שלי באמת מבטאת את מה שעורר בי הרגע?</li>
+              <li>האם אני מחזק את ה‑CRB2 — או בטעות מרגיע את עצמי?</li>
+              <li>מה הקליינט למד מהתגובה שלי על מי שהוא?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span class="en">Rule 3 · Reinforce</span><span>בפועל</span></div>
+    </section>
+  </section>
+
+  <!-- ============ RULE 4 ============ -->
+  <section>
+    <section data-background-color="#f4efe6">
+      <div class="topbar"></div>
+      <div class="rule-cover">
+        <div class="bignum">4<small>/5</small></div>
+        <div class="rule-en">Rule 4 · Notice Your Effect</div>
+        <h2 style="font-size:2.0em;">שים לב להשפעתך</h2>
+        <p class="lead" style="margin-top:10px;">חיזוק פועל לאורך זמן, לא מיידית. עקוב אחר המגמה: האם ה‑CRB2 עולה וה‑CRB1 יורד? ההשפעה בפועל היא המדד — לא הכוונה.</p>
+        <div class="pips"><span>Notice</span><span>Evoke</span><span>Reinforce</span><span class="on">Effect</span><span>Generalize</span></div>
+      </div>
+      <div class="footer"><span class="en">Rule 4 · Effect</span><span>שים לב להשפעתך</span></div>
+    </section>
+
+    <section data-background-color="#f4efe6">
+      <div class="topbar"></div>
+      <div class="slide-pad">
+        <div class="eyebrow">4 · שים לב להשפעתך</div>
+        <h2 style="font-size:1.5em;">מה קורה לאורך זמן?</h2>
+        <p class="lead-wide" style="max-width:48ch; margin-top:8px;">
+          חיזוק אמיתי ניכר במגמה, לא ברגע יחיד. אם מה שחשבת לחיזוק אינו מגדיל את ה‑CRB2 —
+          ייתכן שלא חיזקת מה שחשבת. <strong>ההשפעה בפועל היא הנתון</strong>, ואותה בודקים לאורך זמן.
+        </p>
+        <div class="two">
+          <div class="col">
+            <div class="colhead">כלים למעקב</div>
+            <ul>
+              <li>האם ה‑CRB2 מופיע שוב, בתדירות גבוהה יותר?</li>
+              <li>האם ה‑CRB1 נחלש בעקבות התגובה שלי?</li>
+              <li>שים לב גם להשפעה הלא‑מכוונת של תגובותיך.</li>
+            </ul>
+          </div>
+          <div class="col">
+            <div class="colhead">שאלות להדרכה</div>
+            <ul class="q">
+              <li>מה הנתונים אומרים — ולא מה שקיוויתי?</li>
+              <li>האם אני מחזק בלי כוונה דווקא CRB1?</li>
+              <li>מה עליי לשנות בתגובה שלי בהמשך?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span class="en">Rule 4 · Effect</span><span>לאורך זמן</span></div>
+    </section>
+  </section>
+
+  <!-- ============ RULE 5 ============ -->
+  <section>
+    <section data-background-color="#f4efe6">
+      <div class="topbar"></div>
+      <div class="rule-cover">
+        <div class="bignum">5<small>/5</small></div>
+        <div class="rule-en">Rule 5 · Support Generalization</div>
+        <h2 style="font-size:2.0em;">תמוך בהכללה</h2>
+        <p class="lead" style="margin-top:10px;">ההכללה היא שינוי מחוץ לחדר — מתמשך ומפיק כדי שהנלמד יוכל לצמוח גם בעולם שבחוץ, אל הקשרים האמיתיים של החיים.</p>
+        <div class="pips"><span>Notice</span><span>Evoke</span><span>Reinforce</span><span>Effect</span><span class="on">Generalize</span></div>
+      </div>
+      <div class="footer"><span class="en">Rule 5 · Generalize</span><span>תמוך בהכללה</span></div>
+    </section>
+
+    <section data-background-color="#f4efe6">
+      <div class="topbar"></div>
+      <div class="slide-pad">
+        <div class="eyebrow">5 · תמוך בהכללה</div>
+        <h2 style="font-size:1.4em;">מהחדר אל החיים — שתי דרכים</h2>
+        <div class="cards" style="margin-top:14px;">
+          <div class="card"><div class="sub">דרך 1 · מקבילות מבפנים‑לחוץ <span dir="ltr" class="en">In‑to‑Out Parallels</span></div>
+            <p>לקחת את מה שקרה זה עתה בחדר, בפגישה, ולהקביל אותו במפורש למצב שאיתו הקליינט מתמודד בחוץ.</p></div>
+          <div class="card"><div class="sub">דרך 2 · שיעורי בית</div>
+            <p>תרגול ה‑CRB2 עם אנשים חשובים. למשל: "אחרי שחיזקנו קשר עין בחדר — בקש להגביר אותו גם עם אחרים".</p></div>
+        </div>
+        <div class="goal">
+          <span class="tag">דוגמה למקבילה מבפנים‑לחוץ</span>
+          <p class="en" dir="ltr" style="text-align:left;">"When you ask me for what you need, I give it to you. I think your partner wants that from you too — what do you think?"</p>
+        </div>
+      </div>
+      <div class="footer"><span class="en">Rule 5 · Generalize</span><span>שתי דרכים</span></div>
+    </section>
+  </section>
+
+  <!-- 20 · CASE EXAMPLE -->
+  <section data-background-color="#f4efe6">
+    <div class="topbar"></div>
+    <div class="slide-pad">
+      <div class="eyebrow">הדגמה · Case Example</div>
+      <h2 style="font-size:1.4em;">חמשת הכללים בפעולה</h2>
+      <div class="case-row"><div class="k"><b>1</b><span>Notice</span></div>
+        <div class="t">המטפל מזהה CRB שהתרחש קודם — אותה התגוננות שהמטופלת תיארה בבית, <span class="hl">מתרחשת עכשיו בחדר</span>.</div></div>
+      <div class="case-row"><div class="k"><b>2</b><span>Evoke</span></div>
+        <div class="t"><span class="en">"מה יכולת לנסות ממש עכשיו</span> שיירגיש פחות הגנתי?" — הזמנה לתגובה חדשה ברגע.</div></div>
+      <div class="case-row"><div class="k"><b>3</b><span>Reinforce</span></div>
+        <div class="t">"זה <span class="hl">מדהים</span> כמה שונה זה נשמע" — חיזוק אותנטי של רגע הפגיעות.</div></div>
+      <div class="case-row"><div class="k"><b>4</b><span>Effect</span></div>
+        <div class="t">המטפל בוחן: האם הפתיחות חוזרת? האם ההגנה מתרככת? — מעקב אחר ההשפעה בפועל.</div></div>
+      <div class="case-row"><div class="k"><b>5</b><span>Generalize</span></div>
+        <div class="t en" dir="ltr" style="text-align:left;">"What if you could do this with her?" — חיבור הרגע אל הקשר שמחוץ לחדר.</div></div>
+    </div>
+    <div class="footer"><span class="en">FAP Made Simple</span><span>הדגמה</span></div>
+  </section>
+
+  <!-- 21 · SUMMARY -->
+  <section data-background-color="#f4efe6">
+    <div class="topbar"></div>
+    <div class="slide-pad">
+      <div class="eyebrow">סיכום</div>
+      <h2 style="font-size:1.6em;"><span dir="ltr">FAP</span> — לא סגנון, אלא תהליך</h2>
+      <div class="two" style="margin-top:10px;">
+        <div class="col">
+          <ul>
+            <li><strong>1 · שים לב</strong> — הבחן ב‑CRBs בזמן אמת, כאן ועכשיו.</li>
+            <li><strong>2 · עורר</strong> — צור את ההקשר שבו ה‑CRB מופיע.</li>
+            <li><strong>3 · חזק</strong> — חזק את ה‑CRB2 בתגובה טבעית ואותנטית.</li>
+          </ul>
+        </div>
+        <div class="col">
+          <ul>
+            <li><strong>4 · שים לב להשפעתך</strong> — עקוב אחר ההשפעה בפועל לאורך זמן.</li>
+            <li><strong>5 · תמוך בהכללה</strong> — העבר את הנלמד מהחדר אל החיים.</li>
+          </ul>
+          <p class="lead" style="margin-top:14px;">חמישה רגעים שחוזרים על עצמם — לא מתכון, אלא דרך התבוננות וקשר.</p>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><span class="en">FAP Made Simple</span><span>סיכום</span></div>
+  </section>
+
+  <!-- 22 · CLOSING QUOTE -->
+  <section data-background-color="#f4efe6">
+    <div class="topbar"></div>
+    <div class="dots"><i></i><i></i><i class="on"></i><i></i><i></i></div>
+    <div class="quote">
+      <p>FAP is about these moments in the therapy relationship, when a compassionate understanding of the other person allows you to <span class="sees">see</span> and <span class="sees">evoke</span> and <span class="sees">reinforce</span> a different way of relating.</p>
+      <cite>— Shape Process with the Five Rules of FAP</cite>
+    </div>
+    <div class="footer"><span class="en">FAP Made Simple</span><span>סיום</span></div>
+  </section>
+
+</div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    width: 1280, height: 720,
+    margin: 0.04,
+    rtl: true,
+    hash: true,
+    slideNumber: 'c/t',
+    transition: 'fade',
+    controlsTutorial: false
+  });
+</script>
+</body>
+</html>
