@@ -7,6 +7,7 @@ A small toolkit of terminal CLIs that pair with the AiToEarn project:
 | `hermes` | An agentic loop powered by Claude (`bash` + text-editor tools).    |
 | `kanban` | A JSON-backed kanban board for the terminal.                       |
 | `rss`    | Subscribe to feeds and build a digest, optionally summarized by AI.|
+| `notes`  | Quick note capture, search, and an AI question-answering mode.      |
 
 ## Install
 
@@ -58,6 +59,20 @@ rss digest --summarize              # add an AI briefing (needs ANTHROPIC_API_KE
 ```
 
 Feeds live in `~/.aitoearn/feeds.txt`.
+
+## notes — quick notes + AI ask
+
+```bash
+notes add "remember to renew the domain" --tag todo
+notes                       # list all notes (default)
+notes list --tag todo       # filter by tag
+notes search "domain"       # substring search
+notes rm 4                  # delete note #4
+notes ask "what do I still need to do?"   # Claude answers over your notes
+```
+
+`notes ask` reads all your notes and asks `claude-opus-4-8` to answer using only
+them, citing the note numbers it used. Notes live in `~/.aitoearn/notes.json`.
 
 ## Requirements
 

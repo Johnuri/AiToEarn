@@ -32,8 +32,8 @@ echo "==> Installing Python dependencies (anthropic, feedparser)"
 "$VENV_DIR/bin/pip" install --quiet -r "$SRC_DIR/requirements.txt"
 
 # 3. Copy the tool sources into the install dir so they run from anywhere.
-echo "==> Installing CLIs: hermes, kanban, rss"
-for tool in hermes kanban rss; do
+echo "==> Installing CLIs: hermes, kanban, rss, notes"
+for tool in hermes kanban rss notes; do
   cp "$SRC_DIR/$tool.py" "$LIB_DIR/$tool.py"
   cat > "$BIN_DIR/$tool" <<EOF
 #!/usr/bin/env bash
