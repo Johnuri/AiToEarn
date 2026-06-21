@@ -4,6 +4,7 @@
  */
 import {
   Bot,
+  Github,
   History,
   Home,
   Sparkles,
@@ -54,6 +55,12 @@ export const routerData: IRouterDataItem[] = [
     translationKey: 'header.agentAssets',
     path: '/agent-assets',
     icon: <Bot size={20} />,
+  },
+  {
+    name: 'GitHub Ranking',
+    translationKey: 'githubRanking',
+    path: '/github-ranking',
+    icon: <Github size={20} />,
   },
 ]
 
